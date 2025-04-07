@@ -1,0 +1,23 @@
+{
+  "extends": [
+    "react-app",
+    "airbnb-typescript-prettier"
+  ],
+  "ignorePatterns": ["src/utils/querity-antlr4/**"],
+  "rules": {
+    "prettier/prettier": 1,
+    "react/jsx-props-no-spreading": 0,
+    "no-nested-ternary": 0,
+    "dot-notation": 0,
+    "react/require-default-props": 0,
+    "@typescript-eslint/ban-ts-comment": 1,
+    "jsx-a11y/click-events-have-key-events": "off",
+    "jsx-a11y/no-static-element-interactions": "off",
+    "react/function-component-definition": "off",
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true, "optionalDependencies": true, "peerDependencies": true }],
+    "react/no-unknown-property": ["error", { "ignore": ["css"] }],
+    "default-param-last": 0,
+    "import/export": 0,
+    "import/prefer-default-export": 0
+  }
+}

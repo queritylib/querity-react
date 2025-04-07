@@ -1,0 +1,73 @@
+{
+  "name": "@queritylib/react",
+  "version": "0.0.1-1",
+  "description": "Querity React components",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.js",
+      "types": "./dist/types.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "rollup -c --bundleConfigAsCjs",
+    "lint": "eslint src --ext .js,.ts,.tsx",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/queritylib/querity-react.git"
+  },
+  "author": {
+    "name": "Bruno Mendola",
+    "url": "https://github.com/brunomendola"
+  },
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/queritylib/querity-react/issues"
+  },
+  "homepage": "https://github.com/queritylib/querity-react#readme",
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "@rollup/plugin-commonjs": "^28.0.3",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^12.1.2",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.1",
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb-typescript-prettier": "^5.0.0",
+    "eslint-config-react-app": "^7.0.1",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jest-transform-stub": "^2.0.0",
+    "rimraf": "^6.0.1",
+    "rollup": "^4.39.0",
+    "rollup-plugin-dts": "^6.2.1",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.2",
+    "ts-jest": "^29.3.1",
+    "tslib": "^2.8.1",
+    "typescript": "^5.8.2",
+    "uuid": "^11.1.0"
+  },
+  "dependencies": {
+    "antlr4": "^4.13.2"
+  },
+  "peerDependencies": {
+    "react": "^19.1.0"
+  },
+  "volta": {
+    "node": "22.14.0"
+  }
+}
