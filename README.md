@@ -33,12 +33,39 @@ To use the Querity components, you need to wrap your application with the `Queri
 
 You can override the default components and styles by passing custom components and styles to the provider.
 
+This allows you to use any CSS framework or custom styles you prefer, such as **Tailwind CSS**, **MUI**, **Bootstrap**, or any other CSS-in-JS solution.
+
 ### Usage
 
-Example to introduce components styling with Tailwind CSS:
+Without any customization:
 
 ```tsx
-import { QuerityComponentsProvider } from "@queritylib/react";
+import { 
+  QuerityComponentsProvider, 
+  defaultQuerityComponents, 
+  QuerityField, 
+  QuerityBuilderUI 
+} from "@queritylib/react";
+
+function App() {
+  return (
+    <QuerityComponentsProvider value={...defaultQuerityComponents}>
+      <QuerityField />
+      <QuerityBuilderUI />
+    </QuerityComponentsProvider>
+  );
+}
+```
+
+Custom components styled with **Tailwind CSS**:
+
+```tsx
+import {
+  QuerityComponentsProvider,
+  defaultQuerityComponents,
+  QuerityField,
+  QuerityBuilderUI
+} from "@queritylib/react";
 
 const querityComponents: ComponentOverrides = {
   ...defaultQuerityComponents,
@@ -73,7 +100,7 @@ function App() {
 
 The invalid state can be styled by detecting the `aria-invalid` attribute.
 
-Here's how it looks:
+Here's how it looks (with custom components styled with Tailwind CSS, see [Provider](#provider)):
 
 ![QuerityField with valid query](/assets/querity-field-valid.png)
 
