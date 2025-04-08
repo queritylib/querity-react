@@ -24,7 +24,11 @@ export const SimpleConditionWidget = (props: {
         name="operator"
         value={condition.operator.name}
         onChange={(e) => {
-          condition.operator = Operator.getOperator(e.target.value);
+          const operator = Operator.getOperator(e.target.value);
+          condition.operator = operator;
+          if(operator.requiredValuesCount == 0) {
+            condition.value = undefined;
+          }
           onChange(condition);
         }}
       >
