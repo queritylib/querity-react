@@ -232,7 +232,7 @@ console.log(queryStr)
 ## Development
 
 To make changes to the components in this library and test them in a real application, we strongly suggest to use 
-`npm link` to link the library to your local environment and use it into the [Querity Demo](https://github.com/queritylib/querity) frontend.
+`npm link` to link the library to your local environment and use it into the [Querity Demo](https://github.com/queritylib/querity-demo) frontend.
 
 To do this, follow these steps:
 
