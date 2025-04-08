@@ -27,11 +27,57 @@ or
 yarn add @queritylib/react
 ```
 
+## Provider
+
+To use the Querity components, you need to wrap your application with the `QuerityComponentsProvider`. This provider is responsible for providing the HTML components and the CSS styles needed for the Querity components to function properly.
+
+You can override the default components and styles by passing custom components and styles to the provider.
+
+### Usage
+
+Example to introduce components styling with Tailwind CSS:
+
+```tsx
+import { QuerityComponentsProvider } from "@queritylib/react";
+
+const querityComponents: ComponentOverrides = {
+  ...defaultQuerityComponents,
+  Input: (props) => <input {...props} className={`${props.className} border p-2`} />,
+  Select: (props) => <select {...props} className={`${props.className} border p-2`} />,
+  Button: (props) => <button {...props} className={`${props.className} bg-gray-200 p-2 cursor-pointer`} />,
+  Checkbox: (props) => (
+    <label className="inline-flex items-center cursor-pointer">
+      <input type="checkbox" {...props} className="sr-only peer" />
+      <div
+        className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+      <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">{props.label}</span>
+    </label>
+  )
+};
+
+function App() {
+  return (
+    <QuerityComponentsProvider value={querityComponents}>
+      <QuerityField />
+      <QuerityBuilderUI />
+    </QuerityComponentsProvider>
+  );
+}
+```
+
 ## Components
 
 ### QuerityField
 
 `QuerityField` is a text input component designed for entering and validating queries. It includes built-in validation, event handling, and customizable styling.
+
+The invalid state can be styled by detecting the `aria-invalid` attribute.
+
+Here's how it looks:
+
+![QuerityField with valid query](/assets/querity-field-valid.png)
+
+![QuerityField with invalid query](/assets/querity-field-invalid.png)
 
 #### Usage
 
@@ -46,6 +92,14 @@ import { QuerityField } from "@queritylib/react";
   onEnter={(value) => console.log(value)} // Optional: Handle Enter key press
   onInvalidQuery={(error) => console.log(error)} // Optional: Handle invalid queries
 />
+```
+
+To apply a style when state is invalid add this CSS to your stylesheet:
+
+```css
+.querity-field[aria-invalid="true"] {
+  border-color: red;
+}
 ```
 
 #### Props
@@ -64,6 +118,10 @@ import { QuerityField } from "@queritylib/react";
 `QuerityBuilderUI` is a component that provides a user interface for building queries. 
 
 It includes all the necessary components to create a query in a visual way, including filters, sorting, and pagination.
+
+Here's how it looks (with custom components styled with Tailwind CSS, see [Provider](#provider)):
+
+![QuerityBuilderUI](/assets/querity-builder-ui.png)
 
 #### Usage
 

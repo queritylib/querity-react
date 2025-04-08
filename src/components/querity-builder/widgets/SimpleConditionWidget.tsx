@@ -1,14 +1,17 @@
 import React from "react";
 import { SimpleCondition, Operator, Condition } from "../../../models";
+import { useComponents } from "../../../utils";
 
 export const SimpleConditionWidget = (props: {
   condition: SimpleCondition;
   onChange: (condition: Condition) => void;
 }) => {
   const { condition, onChange } = props;
+  const { Input, Select } = useComponents();
+
   return (
     <>
-      <input
+      <Input
         name="propertyName"
         placeholder="Property Name"
         value={condition.propertyName}
@@ -17,7 +20,7 @@ export const SimpleConditionWidget = (props: {
           onChange(condition);
         }}
       />
-      <select
+      <Select
         name="operator"
         value={condition.operator.name}
         onChange={(e) => {
@@ -30,9 +33,9 @@ export const SimpleConditionWidget = (props: {
             {op.queryLanguageSymbol}
           </option>
         ))}
-      </select>
+      </Select>
       {condition.operator.requiredValuesCount > 0 && (
-        <input
+        <Input
           name="value"
           placeholder="Value"
           value={condition.value}

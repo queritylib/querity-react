@@ -1,5 +1,7 @@
 import React from "react";
+import { v4 as uuidv4 } from "uuid";
 import { Condition, NotCondition } from "../../../models";
+import { useComponents } from "../../../utils";
 import "./NotSwitchWidget.css";
 
 export const NotSwitchWidget = (props: {
@@ -8,10 +10,13 @@ export const NotSwitchWidget = (props: {
   onChange: (condition: Condition) => void;
 }) => {
   const { active, condition, onChange } = props;
+  const { Checkbox } = useComponents();
+
   return (
     <span className="not">
-      <input
-        type="checkbox"
+      <Checkbox
+        id={uuidv4()}
+        label="not"
         name="isNot"
         checked={active}
         onChange={(e) => {
@@ -21,8 +26,7 @@ export const NotSwitchWidget = (props: {
             onChange(new NotCondition(condition));
           }
         }}
-      />{" "}
-      not
+      />
     </span>
   );
 };

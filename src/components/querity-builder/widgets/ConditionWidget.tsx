@@ -10,6 +10,7 @@ import {
 import { SimpleConditionWidget } from "./SimpleConditionWidget";
 import { NotSwitchWidget } from "./NotSwitchWidget";
 import "./ConditionWidget.css";
+import { useComponents } from "../../../utils";
 
 export const ConditionWidget = (props: {
   condition: Condition;
@@ -17,6 +18,8 @@ export const ConditionWidget = (props: {
   onChange: (condition: Condition) => void;
 }) => {
   const { condition, showNot, onChange } = props;
+  const { Button } = useComponents();
+
   if (condition instanceof SimpleCondition) {
     return (
       <>
@@ -80,9 +83,7 @@ export const ConditionWidget = (props: {
               </option>
             ))}
           </select>
-          <button type="button" onClick={addCondition}>
-            +
-          </button>
+          <Button onClick={addCondition}>+</Button>
           {condition.conditions.map((cond, index) => (
             <div
               key={`condition-${index}`} // eslint-disable-line react/no-array-index-key
@@ -93,9 +94,7 @@ export const ConditionWidget = (props: {
                 onChange={(c) => updateCondition(c, index)}
                 showNot
               />
-              <button type="button" onClick={() => removeCondition(index)}>
-                -
-              </button>
+              <Button onClick={() => removeCondition(index)}>-</Button>
             </div>
           ))}
         </div>

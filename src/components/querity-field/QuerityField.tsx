@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { QuerityFieldProps } from "./QuerityField.types";
-import { QuerityParser } from "../../utils";
+import { QuerityParser, useComponents } from "../../utils";
 
 export const QuerityField = (props: QuerityFieldProps) => {
   const { value, placeholder, className, onChange, onEnter, onInvalidQuery } =
@@ -8,6 +8,7 @@ export const QuerityField = (props: QuerityFieldProps) => {
   const [query, setQuery] = useState("");
   const [isValid, setIsValid] = useState(true);
   const [parserError, setParserError] = useState<string>();
+  const { Input } = useComponents();
 
   const queryChanged = useCallback(
     (newQuery: string) => {
@@ -35,7 +36,7 @@ export const QuerityField = (props: QuerityFieldProps) => {
   }, [value, queryChanged]);
 
   return (
-    <input
+    <Input
       data-testid="querity-field"
       type="text"
       value={value}

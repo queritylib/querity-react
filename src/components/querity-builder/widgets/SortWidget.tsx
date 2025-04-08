@@ -1,14 +1,17 @@
 import React from "react";
 import { Sort, Direction } from "../../../models";
+import { useComponents } from "../../../utils";
 
 export const SortWidget = (props: {
   sort: Sort;
   onChange: (sort: Sort) => void;
 }) => {
   const { sort, onChange } = props;
+  const { Input, Select } = useComponents();
+
   return (
     <>
-      <input
+      <Input
         name="propertyName"
         placeholder="Property Name"
         value={sort.propertyName}
@@ -17,7 +20,7 @@ export const SortWidget = (props: {
           onChange(sort);
         }}
       />
-      <select
+      <Select
         name="direction"
         value={sort.direction}
         onChange={(e) => {
@@ -27,7 +30,7 @@ export const SortWidget = (props: {
       >
         <option value="ASC">Ascending</option>
         <option value="DESC">Descending</option>
-      </select>
+      </Select>
     </>
   );
 };

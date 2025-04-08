@@ -1,11 +1,13 @@
 import React from "react";
 import { Pagination } from "../../../models";
+import { useComponents } from "../../../utils";
 
 export const PaginationWidget = (props: {
   pagination: Pagination | undefined;
   onChange: (pagination: Pagination | undefined) => void;
 }) => {
   const { pagination, onChange } = props;
+  const { Input, Button } = useComponents();
 
   function resetPagination() {
     onChange(undefined);
@@ -13,7 +15,7 @@ export const PaginationWidget = (props: {
 
   return (
     <>
-      <input
+      <Input
         type="number"
         name="page"
         placeholder="Page"
@@ -23,7 +25,7 @@ export const PaginationWidget = (props: {
           onChange({ page: parseInt(e.target.value, 10), pageSize });
         }}
       />
-      <input
+      <Input
         type="number"
         name="pageSize"
         placeholder="Page Size"
@@ -33,9 +35,7 @@ export const PaginationWidget = (props: {
           onChange({ page, pageSize: parseInt(e.target.value, 10) });
         }}
       />
-      <button type="button" onClick={() => resetPagination()}>
-        x
-      </button>
+      <Button onClick={() => resetPagination()}>x</Button>
     </>
   );
 };
