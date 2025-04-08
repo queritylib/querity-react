@@ -9,6 +9,10 @@ Querity React Components
 
 This component library is built with **TypeScript** and aims to keep peer dependencies to a minimum, ensuring a lightweight and flexible integration.
 
+## Demo
+
+Check out the simplest demo application using Querity at [querity-demo](https://github.com/queritylib/querity-demo).
+
 ## Requirements
 
 - React 19
