@@ -13,7 +13,7 @@ export const NotSwitchWidget = (props: {
   const { Checkbox } = useComponents();
 
   return (
-    <span className="not">
+    <span className="not-switch">
       <Checkbox
         id={uuidv4()}
         label="not"
