@@ -35,7 +35,9 @@ export const PaginationWidget = (props: {
           onChange({ page, pageSize: parseInt(e.target.value, 10) });
         }}
       />
-      <Button className="clear-button" onClick={() => resetPagination()}>x</Button>
+      <Button className="clear-button" onClick={() => resetPagination()}>
+        x
+      </Button>
     </>
   );
 };

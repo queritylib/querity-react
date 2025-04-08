@@ -124,7 +124,9 @@ export const QuerityBuilderUI = (props: QuerityBuilderUIProps) => {
       </div>
       <div id="filters">
         <h5>FILTERS</h5>
-        <Button className="add-button" onClick={() => addCondition()}>+</Button>
+        <Button className="add-button" onClick={() => addCondition()}>
+          +
+        </Button>
         {queryObj.filter && (
           <div className="condition">
             <ConditionWidget
@@ -132,13 +134,17 @@ export const QuerityBuilderUI = (props: QuerityBuilderUIProps) => {
               onChange={(c) => updateFilter(c)}
               showNot
             />
-            <Button className="remove-button" onClick={() => removeFilter()}>-</Button>
+            <Button className="remove-button" onClick={() => removeFilter()}>
+              -
+            </Button>
           </div>
         )}
       </div>
       <div id="sorts">
         <h5>SORTS</h5>
-        <Button className="add-button" onClick={() => addSort()}>+</Button>
+        <Button className="add-button" onClick={() => addSort()}>
+          +
+        </Button>
         {queryObj.sort?.map((sort, index) => (
           <>
             <SortWidget
@@ -146,7 +152,9 @@ export const QuerityBuilderUI = (props: QuerityBuilderUIProps) => {
               sort={sort}
               onChange={(s) => updateSort(s, index)}
             />
-            <Button className="remove-button" onClick={() => removeSort(index)}>-</Button>
+            <Button className="remove-button" onClick={() => removeSort(index)}>
+              -
+            </Button>
           </>
         ))}
       </div>
