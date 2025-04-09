@@ -1,13 +1,14 @@
 import React from "react";
 import { Pagination } from "../../../models";
 import { useComponents } from "../../../utils";
+import { ClearButton } from "./ClearButton";
 
 export const PaginationWidget = (props: {
   pagination: Pagination | undefined;
   onChange: (pagination: Pagination | undefined) => void;
 }) => {
   const { pagination, onChange } = props;
-  const { Input, Button } = useComponents();
+  const { Input } = useComponents();
 
   function resetPagination() {
     onChange(undefined);
@@ -35,9 +36,7 @@ export const PaginationWidget = (props: {
           onChange({ page, pageSize: parseInt(e.target.value, 10) });
         }}
       />
-      <Button className="clear-button" onClick={() => resetPagination()}>
-        x
-      </Button>
+      <ClearButton onClick={() => resetPagination()} />
     </>
   );
 };

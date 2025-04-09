@@ -9,20 +9,39 @@ import {
 } from "../../../models";
 import { SimpleConditionWidget } from "./SimpleConditionWidget";
 import { NotSwitchWidget } from "./NotSwitchWidget";
+import { AddButton } from "./AddButton";
+import { RemoveButton } from "./RemoveButton";
+import { WrapButton } from "./WrapButton";
 import "./ConditionWidget.css";
-import { useComponents } from "../../../utils";
 
 export const ConditionWidget = (props: {
   condition: Condition;
   showNot?: boolean;
   onChange: (condition: Condition) => void;
+  onRemove?: () => void;
 }) => {
-  const { condition, showNot, onChange } = props;
-  const { Button } = useComponents();
+  const { condition, showNot, onChange, onRemove } = props;
+
+  const wrapCondition = () => {
+    const newCondition = new SimpleCondition(
+      "propertyName",
+      Operator.EQUALS,
+      "value"
+    );
+    const newConditions = [condition, newCondition];
+    onChange(new ConditionWrapper(newConditions, LogicOperator.AND));
+  };
+
+  const removeCondition = () => {
+    if (onRemove) {
+      onRemove();
+    }
+  };
 
   if (condition instanceof SimpleCondition) {
     return (
       <>
+        <WrapButton onClick={wrapCondition} />
         {showNot && (
           <NotSwitchWidget
             active={false}
@@ -31,6 +50,7 @@ export const ConditionWidget = (props: {
           />
         )}
         <SimpleConditionWidget condition={condition} onChange={onChange} />
+        <RemoveButton onClick={removeCondition} />
       </>
     );
   }
@@ -44,12 +64,12 @@ export const ConditionWidget = (props: {
       const newConditions = [...condition.conditions, newCondition];
       onChange(new ConditionWrapper(newConditions, condition.operator));
     };
-    const updateCondition = (cond: Condition, index: number) => {
+    const updateConditionAtIndex = (cond: Condition, index: number) => {
       const newConditions = [...condition.conditions];
       newConditions[index] = cond;
       onChange(new ConditionWrapper(newConditions, condition.operator));
     };
-    const removeCondition = (index: number) => {
+    const removeConditionAtIndex = (index: number) => {
       const newConditions = [...condition.conditions];
       newConditions.splice(index, 1);
       if (newConditions.length === 1) {
@@ -60,6 +80,7 @@ export const ConditionWidget = (props: {
     };
     return (
       <>
+        <WrapButton onClick={wrapCondition} />
         {showNot && (
           <NotSwitchWidget
             active={false}
@@ -83,9 +104,8 @@ export const ConditionWidget = (props: {
               </option>
             ))}
           </select>
-          <Button className="add-button" onClick={addCondition}>
-            +
-          </Button>
+          <AddButton onClick={addCondition} />
+          <RemoveButton onClick={removeCondition} />
           {condition.conditions.map((cond, index) => (
             <div
               key={`condition-${index}`} // eslint-disable-line react/no-array-index-key
@@ -93,15 +113,10 @@ export const ConditionWidget = (props: {
             >
               <ConditionWidget
                 condition={cond}
-                onChange={(c) => updateCondition(c, index)}
+                onChange={(c) => updateConditionAtIndex(c, index)}
                 showNot
+                onRemove={() => removeConditionAtIndex(index)}
               />
-              <Button
-                className="remove-button"
-                onClick={() => removeCondition(index)}
-              >
-                -
-              </Button>
             </div>
           ))}
         </div>
@@ -111,6 +126,7 @@ export const ConditionWidget = (props: {
   if (condition instanceof NotCondition) {
     return (
       <>
+        <WrapButton onClick={wrapCondition} />
         {showNot && (
           <NotSwitchWidget active condition={condition} onChange={onChange} />
         )}
@@ -120,6 +136,7 @@ export const ConditionWidget = (props: {
           onChange={(c) => {
             onChange(new NotCondition(c));
           }}
+          onRemove={removeCondition}
         />
       </>
     );

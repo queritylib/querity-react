@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { QuerityBuilderUIProps } from "./QuerityBuilderUI.types";
 import { QuerityBuilder, QuerityParser, useComponents } from "../../utils";
-import { ConditionWidget, PaginationWidget, SortWidget } from "./widgets";
+import {
+  ConditionWidget,
+  PaginationWidget,
+  SortWidget,
+  AddButton,
+  RemoveButton,
+} from "./widgets";
 import {
   Condition,
   ConditionWrapper,
@@ -19,7 +25,7 @@ export const QuerityBuilderUI = (props: QuerityBuilderUIProps) => {
   const { query, onChange, className } = props;
   const [queryObj, setQueryObj] = useState<Query>({} as Query);
   const [invalid, setInvalid] = useState(false);
-  const { Checkbox, Button } = useComponents();
+  const { Checkbox } = useComponents();
 
   useEffect(() => {
     try {
@@ -38,10 +44,19 @@ export const QuerityBuilderUI = (props: QuerityBuilderUIProps) => {
     return QuerityBuilder.buildQuery(newQueryObj);
   }
 
+  function validateQuery(queryStr: string): boolean {
+    try {
+      QuerityParser.parseQuery(queryStr);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   function updateQueryObj(newQueryObj: Query) {
     setQueryObj(newQueryObj);
     const newQueryStr = getQueryStr(newQueryObj);
-    if (onChange) {
+    if (validateQuery(newQueryStr) && onChange) {
       onChange(newQueryStr);
     }
   }
@@ -124,27 +139,21 @@ export const QuerityBuilderUI = (props: QuerityBuilderUIProps) => {
       </div>
       <div id="filters">
         <h5>FILTERS</h5>
-        <Button className="add-button" onClick={() => addCondition()}>
-          +
-        </Button>
+        {!queryObj.filter && <AddButton onClick={() => addCondition()} />}
         {queryObj.filter && (
           <div className="condition">
             <ConditionWidget
               condition={queryObj.filter}
               onChange={(c) => updateFilter(c)}
               showNot
+              onRemove={() => removeFilter()}
             />
-            <Button className="remove-button" onClick={() => removeFilter()}>
-              -
-            </Button>
           </div>
         )}
       </div>
       <div id="sorts">
         <h5>SORTS</h5>
-        <Button className="add-button" onClick={() => addSort()}>
-          +
-        </Button>
+        <AddButton onClick={() => addSort()} />
         {queryObj.sort?.map((sort, index) => (
           <>
             <SortWidget
@@ -152,9 +161,7 @@ export const QuerityBuilderUI = (props: QuerityBuilderUIProps) => {
               sort={sort}
               onChange={(s) => updateSort(s, index)}
             />
-            <Button className="remove-button" onClick={() => removeSort(index)}>
-              -
-            </Button>
+            <RemoveButton onClick={() => removeSort(index)} />
           </>
         ))}
       </div>

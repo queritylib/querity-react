@@ -26,7 +26,7 @@ export const SimpleConditionWidget = (props: {
         onChange={(e) => {
           const operator = Operator.getOperator(e.target.value);
           condition.operator = operator;
-          if(operator.requiredValuesCount == 0) {
+          if (operator.requiredValuesCount === 0) {
             condition.value = undefined;
           }
           onChange(condition);
