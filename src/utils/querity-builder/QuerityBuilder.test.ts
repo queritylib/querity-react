@@ -190,6 +190,22 @@ describe("QuerityBuilder", () => {
     expect(result).toBe("lastName is not null");
   });
 
+  it('should build lastName in ("Skywalker","Solo")', () => {
+    const query = new Query(
+      new SimpleCondition("lastName", Operator.IN, ["Skywalker", "Solo"])
+    );
+    const result = QuerityBuilder.buildQuery(query);
+    expect(result).toBe('lastName in ("Skywalker","Solo")');
+  });
+
+  it('should build lastName not in ("Skywalker","Solo")', () => {
+    const query = new Query(
+      new SimpleCondition("lastName", Operator.NOT_IN, ["Skywalker", "Solo"])
+    );
+    const result = QuerityBuilder.buildQuery(query);
+    expect(result).toBe('lastName not in ("Skywalker","Solo")');
+  });
+
   it("should build deleted=false", () => {
     const query = new Query(
       new SimpleCondition("deleted", Operator.EQUALS, false)

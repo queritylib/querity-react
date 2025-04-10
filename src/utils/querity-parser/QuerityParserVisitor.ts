@@ -1,5 +1,6 @@
 import QueryParserVisitor from "../querity-antlr4/QueryParserVisitor";
 import {
+  ArrayValueContext,
   ConditionContext,
   ConditionWrapperContext,
   DirectionContext,
@@ -8,6 +9,7 @@ import {
   PaginationParamsContext,
   QueryContext,
   SimpleConditionContext,
+  SimpleValueContext,
   SortFieldContext,
   SortFieldsContext,
 } from "../querity-antlr4/QueryParser";
@@ -89,6 +91,12 @@ export class QuerityParserVisitor extends QueryParserVisitor<any> {
     if (ctx.IS_NOT_NULL() != null) {
       return Operator.IS_NOT_NULL;
     }
+    if (ctx.IN() != null) {
+      return Operator.IN;
+    }
+    if (ctx.NOT_IN() != null) {
+      return Operator.NOT_IN;
+    }
     throw new Error(`Unknown operator ${ctx.getText()}`);
   };
 
@@ -116,17 +124,39 @@ export class QuerityParserVisitor extends QueryParserVisitor<any> {
     const operator = QuerityParserVisitor.visitOperator(ctx.operator());
     let value;
     if (operator.requiredValuesCount > 0) {
-      if (ctx.INT_VALUE() != null) {
-        value = parseInt(ctx.INT_VALUE().getText(), 10);
-      } else if (ctx.DECIMAL_VALUE() != null) {
-        value = parseFloat(ctx.DECIMAL_VALUE().getText());
-      } else if (ctx.BOOLEAN_VALUE() != null) {
-        value = ctx.BOOLEAN_VALUE().getText() === "true";
-      } else {
-        value = ctx.STRING_VALUE().getText().replaceAll('"', ""); // Remove quotes if present
+      if (ctx.arrayValue() != null) {
+        value = QuerityParserVisitor.visitArrayValue(ctx.arrayValue());
+      } else if (ctx.simpleValue() != null) {
+        value = QuerityParserVisitor.visitSimpleValue(ctx.simpleValue());
       }
     }
     return new SimpleCondition(propertyName, operator, value);
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static readonly visitArrayValue: (ctx: ArrayValueContext) => any[] = (
+    ctx: ArrayValueContext
+  ) => {
+    if (!ctx.simpleValue_list()) return [];
+    return ctx
+      .simpleValue_list()
+      .map((simpleValue) => QuerityParserVisitor.visitSimpleValue(simpleValue));
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static readonly visitSimpleValue: (ctx: SimpleValueContext) => any = (
+    ctx: SimpleValueContext
+  ) => {
+    if (ctx.INT_VALUE() != null) {
+      return parseInt(ctx.INT_VALUE().getText(), 10);
+    }
+    if (ctx.DECIMAL_VALUE() != null) {
+      return parseFloat(ctx.DECIMAL_VALUE().getText());
+    }
+    if (ctx.BOOLEAN_VALUE() != null) {
+      return ctx.BOOLEAN_VALUE().getText() === "true";
+    }
+    return ctx.STRING_VALUE().getText().replaceAll('"', ""); // Remove quotes if present
   };
 
   static readonly visitDirection: (ctx: DirectionContext) => Direction = (

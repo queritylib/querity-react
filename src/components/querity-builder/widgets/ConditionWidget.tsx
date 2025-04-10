@@ -50,7 +50,7 @@ export const ConditionWidget = (props: {
           />
         )}
         <SimpleConditionWidget condition={condition} onChange={onChange} />
-        <RemoveButton onClick={removeCondition} />
+        <RemoveButton title="remove condition" onClick={removeCondition} />
       </>
     );
   }
@@ -104,8 +104,8 @@ export const ConditionWidget = (props: {
               </option>
             ))}
           </select>
-          <AddButton onClick={addCondition} />
-          <RemoveButton onClick={removeCondition} />
+          <AddButton title="add condition" onClick={addCondition} />
+          <RemoveButton title="remove condition" onClick={removeCondition} />
           {condition.conditions.map((cond, index) => (
             <div
               key={`condition-${index}`} // eslint-disable-line react/no-array-index-key
