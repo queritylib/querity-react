@@ -100,6 +100,8 @@ export class QuerityBuilderVisitor {
   private static readonly visitValue = (value: any): string => {
     if (value === null || value === undefined) return value;
     if (typeof value === "string") return `"${value}"`;
+    if (Array.isArray(value))
+      return `(${value.map(QuerityBuilderVisitor.visitValue).join(",")})`;
     return value.toString();
   };
 }

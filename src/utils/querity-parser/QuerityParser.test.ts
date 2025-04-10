@@ -191,6 +191,26 @@ describe("QuerityParser Integration Test", () => {
     );
   });
 
+  it('should parse lastName in ("Skywalker","Solo")', () => {
+    const query = 'lastName in ("Skywalker","Solo")';
+    const result = QuerityParser.parseQuery(query);
+    expect(result).toEqual(
+      new Query(
+        new SimpleCondition("lastName", Operator.IN, ["Skywalker", "Solo"])
+      )
+    );
+  });
+
+  it('should parse lastName not in ("Skywalker","Solo")', () => {
+    const query = 'lastName not in ("Skywalker","Solo")';
+    const result = QuerityParser.parseQuery(query);
+    expect(result).toEqual(
+      new Query(
+        new SimpleCondition("lastName", Operator.NOT_IN, ["Skywalker", "Solo"])
+      )
+    );
+  });
+
   it("should parse deleted=false", () => {
     const query = "deleted=false";
     const result = QuerityParser.parseQuery(query);

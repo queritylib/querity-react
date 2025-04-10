@@ -38,26 +38,30 @@ export default class QueryParser extends Parser {
 	public static readonly CONTAINS = 17;
 	public static readonly IS_NULL = 18;
 	public static readonly IS_NOT_NULL = 19;
-	public static readonly LPAREN = 20;
-	public static readonly RPAREN = 21;
-	public static readonly COMMA = 22;
-	public static readonly INT_VALUE = 23;
-	public static readonly DECIMAL_VALUE = 24;
-	public static readonly BOOLEAN_VALUE = 25;
-	public static readonly PROPERTY = 26;
-	public static readonly STRING_VALUE = 27;
-	public static readonly WS = 28;
+	public static readonly IN = 20;
+	public static readonly NOT_IN = 21;
+	public static readonly LPAREN = 22;
+	public static readonly RPAREN = 23;
+	public static readonly COMMA = 24;
+	public static readonly INT_VALUE = 25;
+	public static readonly DECIMAL_VALUE = 26;
+	public static readonly BOOLEAN_VALUE = 27;
+	public static readonly PROPERTY = 28;
+	public static readonly STRING_VALUE = 29;
+	public static readonly WS = 30;
 	public static override readonly EOF = Token.EOF;
 	public static readonly RULE_query = 0;
 	public static readonly RULE_condition = 1;
 	public static readonly RULE_operator = 2;
 	public static readonly RULE_conditionWrapper = 3;
 	public static readonly RULE_notCondition = 4;
-	public static readonly RULE_simpleCondition = 5;
-	public static readonly RULE_direction = 6;
-	public static readonly RULE_sortField = 7;
-	public static readonly RULE_sortFields = 8;
-	public static readonly RULE_paginationParams = 9;
+	public static readonly RULE_simpleValue = 5;
+	public static readonly RULE_arrayValue = 6;
+	public static readonly RULE_simpleCondition = 7;
+	public static readonly RULE_direction = 8;
+	public static readonly RULE_sortField = 9;
+	public static readonly RULE_sortFields = 10;
+	public static readonly RULE_paginationParams = 11;
 	public static readonly literalNames: (string | null)[] = [ null, "'distinct'", 
                                                             "'and'", "'or'", 
                                                             "'not'", "'sort by'", 
@@ -70,6 +74,7 @@ export default class QueryParser extends Parser {
                                                             "'contains'", 
                                                             "'is null'", 
                                                             "'is not null'", 
+                                                            "'in'", "'not in'", 
                                                             "'('", "')'", 
                                                             "','" ];
 	public static readonly symbolicNames: (string | null)[] = [ null, "DISTINCT", 
@@ -85,6 +90,7 @@ export default class QueryParser extends Parser {
                                                              "CONTAINS", 
                                                              "IS_NULL", 
                                                              "IS_NOT_NULL", 
+                                                             "IN", "NOT_IN", 
                                                              "LPAREN", "RPAREN", 
                                                              "COMMA", "INT_VALUE", 
                                                              "DECIMAL_VALUE", 
@@ -95,7 +101,8 @@ export default class QueryParser extends Parser {
 	// tslint:disable:no-trailing-whitespace
 	public static readonly ruleNames: string[] = [
 		"query", "condition", "operator", "conditionWrapper", "notCondition", 
-		"simpleCondition", "direction", "sortField", "sortFields", "paginationParams",
+		"simpleValue", "arrayValue", "simpleCondition", "direction", "sortField", 
+		"sortFields", "paginationParams",
 	];
 	public get grammarFileName(): string { return "QueryParser.g4"; }
 	public get literalNames(): (string | null)[] { return QueryParser.literalNames; }
@@ -119,46 +126,46 @@ export default class QueryParser extends Parser {
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 21;
+			this.state = 25;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if (_la===1) {
 				{
-				this.state = 20;
+				this.state = 24;
 				this.match(QueryParser.DISTINCT);
-				}
-			}
-
-			this.state = 24;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & 67108892) !== 0)) {
-				{
-				this.state = 23;
-				this.condition();
 				}
 			}
 
 			this.state = 28;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
-			if (_la===5) {
+			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & 268435484) !== 0)) {
 				{
-				this.state = 26;
-				this.match(QueryParser.SORT);
 				this.state = 27;
-				this.sortFields();
+				this.condition();
 				}
 			}
 
 			this.state = 32;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
-			if (_la===8) {
+			if (_la===5) {
 				{
 				this.state = 30;
-				this.match(QueryParser.PAGINATION);
+				this.match(QueryParser.SORT);
 				this.state = 31;
+				this.sortFields();
+				}
+			}
+
+			this.state = 36;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la===8) {
+				{
+				this.state = 34;
+				this.match(QueryParser.PAGINATION);
+				this.state = 35;
 				this.paginationParams();
 				}
 			}
@@ -184,13 +191,13 @@ export default class QueryParser extends Parser {
 		let localctx: ConditionContext = new ConditionContext(this, this._ctx, this.state);
 		this.enterRule(localctx, 2, QueryParser.RULE_condition);
 		try {
-			this.state = 37;
+			this.state = 41;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
-			case 26:
+			case 28:
 				this.enterOuterAlt(localctx, 1);
 				{
-				this.state = 34;
+				this.state = 38;
 				this.simpleCondition();
 				}
 				break;
@@ -198,14 +205,14 @@ export default class QueryParser extends Parser {
 			case 3:
 				this.enterOuterAlt(localctx, 2);
 				{
-				this.state = 35;
+				this.state = 39;
 				this.conditionWrapper();
 				}
 				break;
 			case 4:
 				this.enterOuterAlt(localctx, 3);
 				{
-				this.state = 36;
+				this.state = 40;
 				this.notCondition();
 				}
 				break;
@@ -235,9 +242,9 @@ export default class QueryParser extends Parser {
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 39;
+			this.state = 43;
 			_la = this._input.LA(1);
-			if(!((((_la) & ~0x1F) === 0 && ((1 << _la) & 1048064) !== 0))) {
+			if(!((((_la) & ~0x1F) === 0 && ((1 << _la) & 4193792) !== 0))) {
 			this._errHandler.recoverInline(this);
 			}
 			else {
@@ -268,7 +275,7 @@ export default class QueryParser extends Parser {
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 41;
+			this.state = 45;
 			_la = this._input.LA(1);
 			if(!(_la===2 || _la===3)) {
 			this._errHandler.recoverInline(this);
@@ -277,27 +284,27 @@ export default class QueryParser extends Parser {
 				this._errHandler.reportMatch(this);
 			    this.consume();
 			}
-			this.state = 42;
+			this.state = 46;
 			this.match(QueryParser.LPAREN);
-			this.state = 43;
+			this.state = 47;
 			this.condition();
-			this.state = 48;
+			this.state = 52;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
-			while (_la===22) {
+			while (_la===24) {
 				{
 				{
-				this.state = 44;
+				this.state = 48;
 				this.match(QueryParser.COMMA);
-				this.state = 45;
+				this.state = 49;
 				this.condition();
 				}
 				}
-				this.state = 50;
+				this.state = 54;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 			}
-			this.state = 51;
+			this.state = 55;
 			this.match(QueryParser.RPAREN);
 			}
 		}
@@ -322,13 +329,92 @@ export default class QueryParser extends Parser {
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 53;
+			this.state = 57;
 			this.match(QueryParser.NOT);
-			this.state = 54;
+			this.state = 58;
 			this.match(QueryParser.LPAREN);
-			this.state = 55;
+			this.state = 59;
 			this.condition();
-			this.state = 56;
+			this.state = 60;
+			this.match(QueryParser.RPAREN);
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return localctx;
+	}
+	// @RuleVersion(0)
+	public simpleValue(): SimpleValueContext {
+		let localctx: SimpleValueContext = new SimpleValueContext(this, this._ctx, this.state);
+		this.enterRule(localctx, 10, QueryParser.RULE_simpleValue);
+		let _la: number;
+		try {
+			this.enterOuterAlt(localctx, 1);
+			{
+			this.state = 62;
+			_la = this._input.LA(1);
+			if(!((((_la) & ~0x1F) === 0 && ((1 << _la) & 771751936) !== 0))) {
+			this._errHandler.recoverInline(this);
+			}
+			else {
+				this._errHandler.reportMatch(this);
+			    this.consume();
+			}
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return localctx;
+	}
+	// @RuleVersion(0)
+	public arrayValue(): ArrayValueContext {
+		let localctx: ArrayValueContext = new ArrayValueContext(this, this._ctx, this.state);
+		this.enterRule(localctx, 12, QueryParser.RULE_arrayValue);
+		let _la: number;
+		try {
+			this.enterOuterAlt(localctx, 1);
+			{
+			this.state = 64;
+			this.match(QueryParser.LPAREN);
+			this.state = 65;
+			this.simpleValue();
+			this.state = 70;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			while (_la===24) {
+				{
+				{
+				this.state = 66;
+				this.match(QueryParser.COMMA);
+				this.state = 67;
+				this.simpleValue();
+				}
+				}
+				this.state = 72;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+			}
+			this.state = 73;
 			this.match(QueryParser.RPAREN);
 			}
 		}
@@ -349,32 +435,41 @@ export default class QueryParser extends Parser {
 	// @RuleVersion(0)
 	public simpleCondition(): SimpleConditionContext {
 		let localctx: SimpleConditionContext = new SimpleConditionContext(this, this._ctx, this.state);
-		this.enterRule(localctx, 10, QueryParser.RULE_simpleCondition);
-		let _la: number;
+		this.enterRule(localctx, 14, QueryParser.RULE_simpleCondition);
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 58;
+			this.state = 75;
 			this.match(QueryParser.PROPERTY);
-			this.state = 59;
+			this.state = 76;
 			this.operator();
-			this.state = 61;
+			this.state = 79;
 			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & 192937984) !== 0)) {
+			switch (this._input.LA(1)) {
+			case 25:
+			case 26:
+			case 27:
+			case 29:
 				{
-				this.state = 60;
-				_la = this._input.LA(1);
-				if(!((((_la) & ~0x1F) === 0 && ((1 << _la) & 192937984) !== 0))) {
-				this._errHandler.recoverInline(this);
+				this.state = 77;
+				this.simpleValue();
 				}
-				else {
-					this._errHandler.reportMatch(this);
-				    this.consume();
+				break;
+			case 22:
+				{
+				this.state = 78;
+				this.arrayValue();
 				}
-				}
+				break;
+			case -1:
+			case 5:
+			case 8:
+			case 23:
+			case 24:
+				break;
+			default:
+				break;
 			}
-
 			}
 		}
 		catch (re) {
@@ -394,12 +489,12 @@ export default class QueryParser extends Parser {
 	// @RuleVersion(0)
 	public direction(): DirectionContext {
 		let localctx: DirectionContext = new DirectionContext(this, this._ctx, this.state);
-		this.enterRule(localctx, 12, QueryParser.RULE_direction);
+		this.enterRule(localctx, 16, QueryParser.RULE_direction);
 		let _la: number;
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 63;
+			this.state = 81;
 			_la = this._input.LA(1);
 			if(!(_la===6 || _la===7)) {
 			this._errHandler.recoverInline(this);
@@ -427,19 +522,19 @@ export default class QueryParser extends Parser {
 	// @RuleVersion(0)
 	public sortField(): SortFieldContext {
 		let localctx: SortFieldContext = new SortFieldContext(this, this._ctx, this.state);
-		this.enterRule(localctx, 14, QueryParser.RULE_sortField);
+		this.enterRule(localctx, 18, QueryParser.RULE_sortField);
 		let _la: number;
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 65;
+			this.state = 83;
 			this.match(QueryParser.PROPERTY);
-			this.state = 67;
+			this.state = 85;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if (_la===6 || _la===7) {
 				{
-				this.state = 66;
+				this.state = 84;
 				this.direction();
 				}
 			}
@@ -463,26 +558,26 @@ export default class QueryParser extends Parser {
 	// @RuleVersion(0)
 	public sortFields(): SortFieldsContext {
 		let localctx: SortFieldsContext = new SortFieldsContext(this, this._ctx, this.state);
-		this.enterRule(localctx, 16, QueryParser.RULE_sortFields);
+		this.enterRule(localctx, 20, QueryParser.RULE_sortFields);
 		let _la: number;
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 69;
+			this.state = 87;
 			this.sortField();
-			this.state = 74;
+			this.state = 92;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
-			while (_la===22) {
+			while (_la===24) {
 				{
 				{
-				this.state = 70;
+				this.state = 88;
 				this.match(QueryParser.COMMA);
-				this.state = 71;
+				this.state = 89;
 				this.sortField();
 				}
 				}
-				this.state = 76;
+				this.state = 94;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 			}
@@ -505,15 +600,15 @@ export default class QueryParser extends Parser {
 	// @RuleVersion(0)
 	public paginationParams(): PaginationParamsContext {
 		let localctx: PaginationParamsContext = new PaginationParamsContext(this, this._ctx, this.state);
-		this.enterRule(localctx, 18, QueryParser.RULE_paginationParams);
+		this.enterRule(localctx, 22, QueryParser.RULE_paginationParams);
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 77;
+			this.state = 95;
 			this.match(QueryParser.INT_VALUE);
-			this.state = 78;
+			this.state = 96;
 			this.match(QueryParser.COMMA);
-			this.state = 79;
+			this.state = 97;
 			this.match(QueryParser.INT_VALUE);
 			}
 		}
@@ -532,30 +627,35 @@ export default class QueryParser extends Parser {
 		return localctx;
 	}
 
-	public static readonly _serializedATN: number[] = [4,1,28,82,2,0,7,0,2,
-	1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,7,7,2,8,7,8,2,9,7,9,1,
-	0,3,0,22,8,0,1,0,3,0,25,8,0,1,0,1,0,3,0,29,8,0,1,0,1,0,3,0,33,8,0,1,1,1,
-	1,1,1,3,1,38,8,1,1,2,1,2,1,3,1,3,1,3,1,3,1,3,5,3,47,8,3,10,3,12,3,50,9,
-	3,1,3,1,3,1,4,1,4,1,4,1,4,1,4,1,5,1,5,1,5,3,5,62,8,5,1,6,1,6,1,7,1,7,3,
-	7,68,8,7,1,8,1,8,1,8,5,8,73,8,8,10,8,12,8,76,9,8,1,9,1,9,1,9,1,9,1,9,0,
-	0,10,0,2,4,6,8,10,12,14,16,18,0,4,1,0,9,19,1,0,2,3,2,0,23,25,27,27,1,0,
-	6,7,81,0,21,1,0,0,0,2,37,1,0,0,0,4,39,1,0,0,0,6,41,1,0,0,0,8,53,1,0,0,0,
-	10,58,1,0,0,0,12,63,1,0,0,0,14,65,1,0,0,0,16,69,1,0,0,0,18,77,1,0,0,0,20,
-	22,5,1,0,0,21,20,1,0,0,0,21,22,1,0,0,0,22,24,1,0,0,0,23,25,3,2,1,0,24,23,
-	1,0,0,0,24,25,1,0,0,0,25,28,1,0,0,0,26,27,5,5,0,0,27,29,3,16,8,0,28,26,
-	1,0,0,0,28,29,1,0,0,0,29,32,1,0,0,0,30,31,5,8,0,0,31,33,3,18,9,0,32,30,
-	1,0,0,0,32,33,1,0,0,0,33,1,1,0,0,0,34,38,3,10,5,0,35,38,3,6,3,0,36,38,3,
-	8,4,0,37,34,1,0,0,0,37,35,1,0,0,0,37,36,1,0,0,0,38,3,1,0,0,0,39,40,7,0,
-	0,0,40,5,1,0,0,0,41,42,7,1,0,0,42,43,5,20,0,0,43,48,3,2,1,0,44,45,5,22,
-	0,0,45,47,3,2,1,0,46,44,1,0,0,0,47,50,1,0,0,0,48,46,1,0,0,0,48,49,1,0,0,
-	0,49,51,1,0,0,0,50,48,1,0,0,0,51,52,5,21,0,0,52,7,1,0,0,0,53,54,5,4,0,0,
-	54,55,5,20,0,0,55,56,3,2,1,0,56,57,5,21,0,0,57,9,1,0,0,0,58,59,5,26,0,0,
-	59,61,3,4,2,0,60,62,7,2,0,0,61,60,1,0,0,0,61,62,1,0,0,0,62,11,1,0,0,0,63,
-	64,7,3,0,0,64,13,1,0,0,0,65,67,5,26,0,0,66,68,3,12,6,0,67,66,1,0,0,0,67,
-	68,1,0,0,0,68,15,1,0,0,0,69,74,3,14,7,0,70,71,5,22,0,0,71,73,3,14,7,0,72,
-	70,1,0,0,0,73,76,1,0,0,0,74,72,1,0,0,0,74,75,1,0,0,0,75,17,1,0,0,0,76,74,
-	1,0,0,0,77,78,5,23,0,0,78,79,5,22,0,0,79,80,5,23,0,0,80,19,1,0,0,0,9,21,
-	24,28,32,37,48,61,67,74];
+	public static readonly _serializedATN: number[] = [4,1,30,100,2,0,7,0,2,
+	1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,7,7,2,8,7,8,2,9,7,9,2,
+	10,7,10,2,11,7,11,1,0,3,0,26,8,0,1,0,3,0,29,8,0,1,0,1,0,3,0,33,8,0,1,0,
+	1,0,3,0,37,8,0,1,1,1,1,1,1,3,1,42,8,1,1,2,1,2,1,3,1,3,1,3,1,3,1,3,5,3,51,
+	8,3,10,3,12,3,54,9,3,1,3,1,3,1,4,1,4,1,4,1,4,1,4,1,5,1,5,1,6,1,6,1,6,1,
+	6,5,6,69,8,6,10,6,12,6,72,9,6,1,6,1,6,1,7,1,7,1,7,1,7,3,7,80,8,7,1,8,1,
+	8,1,9,1,9,3,9,86,8,9,1,10,1,10,1,10,5,10,91,8,10,10,10,12,10,94,9,10,1,
+	11,1,11,1,11,1,11,1,11,0,0,12,0,2,4,6,8,10,12,14,16,18,20,22,0,4,1,0,9,
+	21,1,0,2,3,2,0,25,27,29,29,1,0,6,7,99,0,25,1,0,0,0,2,41,1,0,0,0,4,43,1,
+	0,0,0,6,45,1,0,0,0,8,57,1,0,0,0,10,62,1,0,0,0,12,64,1,0,0,0,14,75,1,0,0,
+	0,16,81,1,0,0,0,18,83,1,0,0,0,20,87,1,0,0,0,22,95,1,0,0,0,24,26,5,1,0,0,
+	25,24,1,0,0,0,25,26,1,0,0,0,26,28,1,0,0,0,27,29,3,2,1,0,28,27,1,0,0,0,28,
+	29,1,0,0,0,29,32,1,0,0,0,30,31,5,5,0,0,31,33,3,20,10,0,32,30,1,0,0,0,32,
+	33,1,0,0,0,33,36,1,0,0,0,34,35,5,8,0,0,35,37,3,22,11,0,36,34,1,0,0,0,36,
+	37,1,0,0,0,37,1,1,0,0,0,38,42,3,14,7,0,39,42,3,6,3,0,40,42,3,8,4,0,41,38,
+	1,0,0,0,41,39,1,0,0,0,41,40,1,0,0,0,42,3,1,0,0,0,43,44,7,0,0,0,44,5,1,0,
+	0,0,45,46,7,1,0,0,46,47,5,22,0,0,47,52,3,2,1,0,48,49,5,24,0,0,49,51,3,2,
+	1,0,50,48,1,0,0,0,51,54,1,0,0,0,52,50,1,0,0,0,52,53,1,0,0,0,53,55,1,0,0,
+	0,54,52,1,0,0,0,55,56,5,23,0,0,56,7,1,0,0,0,57,58,5,4,0,0,58,59,5,22,0,
+	0,59,60,3,2,1,0,60,61,5,23,0,0,61,9,1,0,0,0,62,63,7,2,0,0,63,11,1,0,0,0,
+	64,65,5,22,0,0,65,70,3,10,5,0,66,67,5,24,0,0,67,69,3,10,5,0,68,66,1,0,0,
+	0,69,72,1,0,0,0,70,68,1,0,0,0,70,71,1,0,0,0,71,73,1,0,0,0,72,70,1,0,0,0,
+	73,74,5,23,0,0,74,13,1,0,0,0,75,76,5,28,0,0,76,79,3,4,2,0,77,80,3,10,5,
+	0,78,80,3,12,6,0,79,77,1,0,0,0,79,78,1,0,0,0,79,80,1,0,0,0,80,15,1,0,0,
+	0,81,82,7,3,0,0,82,17,1,0,0,0,83,85,5,28,0,0,84,86,3,16,8,0,85,84,1,0,0,
+	0,85,86,1,0,0,0,86,19,1,0,0,0,87,92,3,18,9,0,88,89,5,24,0,0,89,91,3,18,
+	9,0,90,88,1,0,0,0,91,94,1,0,0,0,92,90,1,0,0,0,92,93,1,0,0,0,93,21,1,0,0,
+	0,94,92,1,0,0,0,95,96,5,25,0,0,96,97,5,24,0,0,97,98,5,25,0,0,98,23,1,0,
+	0,0,10,25,28,32,36,41,52,70,79,85,92];
 
 	private static __ATN: ATN;
 	public static get _ATN(): ATN {
@@ -694,6 +794,12 @@ export class OperatorContext extends ParserRuleContext {
 	public IS_NOT_NULL(): TerminalNode {
 		return this.getToken(QueryParser.IS_NOT_NULL, 0);
 	}
+	public IN(): TerminalNode {
+		return this.getToken(QueryParser.IN, 0);
+	}
+	public NOT_IN(): TerminalNode {
+		return this.getToken(QueryParser.NOT_IN, 0);
+	}
     public get ruleIndex(): number {
     	return QueryParser.RULE_operator;
 	}
@@ -812,16 +918,10 @@ export class NotConditionContext extends ParserRuleContext {
 }
 
 
-export class SimpleConditionContext extends ParserRuleContext {
+export class SimpleValueContext extends ParserRuleContext {
 	constructor(parser?: QueryParser, parent?: ParserRuleContext, invokingState?: number) {
 		super(parent, invokingState);
     	this.parser = parser;
-	}
-	public PROPERTY(): TerminalNode {
-		return this.getToken(QueryParser.PROPERTY, 0);
-	}
-	public operator(): OperatorContext {
-		return this.getTypedRuleContext(OperatorContext, 0) as OperatorContext;
 	}
 	public INT_VALUE(): TerminalNode {
 		return this.getToken(QueryParser.INT_VALUE, 0);
@@ -834,6 +934,94 @@ export class SimpleConditionContext extends ParserRuleContext {
 	}
 	public STRING_VALUE(): TerminalNode {
 		return this.getToken(QueryParser.STRING_VALUE, 0);
+	}
+    public get ruleIndex(): number {
+    	return QueryParser.RULE_simpleValue;
+	}
+	public enterRule(listener: QueryParserListener): void {
+	    if(listener.enterSimpleValue) {
+	 		listener.enterSimpleValue(this);
+		}
+	}
+	public exitRule(listener: QueryParserListener): void {
+	    if(listener.exitSimpleValue) {
+	 		listener.exitSimpleValue(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: QueryParserVisitor<Result>): Result {
+		if (visitor.visitSimpleValue) {
+			return visitor.visitSimpleValue(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class ArrayValueContext extends ParserRuleContext {
+	constructor(parser?: QueryParser, parent?: ParserRuleContext, invokingState?: number) {
+		super(parent, invokingState);
+    	this.parser = parser;
+	}
+	public LPAREN(): TerminalNode {
+		return this.getToken(QueryParser.LPAREN, 0);
+	}
+	public simpleValue_list(): SimpleValueContext[] {
+		return this.getTypedRuleContexts(SimpleValueContext) as SimpleValueContext[];
+	}
+	public simpleValue(i: number): SimpleValueContext {
+		return this.getTypedRuleContext(SimpleValueContext, i) as SimpleValueContext;
+	}
+	public RPAREN(): TerminalNode {
+		return this.getToken(QueryParser.RPAREN, 0);
+	}
+	public COMMA_list(): TerminalNode[] {
+	    	return this.getTokens(QueryParser.COMMA);
+	}
+	public COMMA(i: number): TerminalNode {
+		return this.getToken(QueryParser.COMMA, i);
+	}
+    public get ruleIndex(): number {
+    	return QueryParser.RULE_arrayValue;
+	}
+	public enterRule(listener: QueryParserListener): void {
+	    if(listener.enterArrayValue) {
+	 		listener.enterArrayValue(this);
+		}
+	}
+	public exitRule(listener: QueryParserListener): void {
+	    if(listener.exitArrayValue) {
+	 		listener.exitArrayValue(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: QueryParserVisitor<Result>): Result {
+		if (visitor.visitArrayValue) {
+			return visitor.visitArrayValue(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class SimpleConditionContext extends ParserRuleContext {
+	constructor(parser?: QueryParser, parent?: ParserRuleContext, invokingState?: number) {
+		super(parent, invokingState);
+    	this.parser = parser;
+	}
+	public PROPERTY(): TerminalNode {
+		return this.getToken(QueryParser.PROPERTY, 0);
+	}
+	public operator(): OperatorContext {
+		return this.getTypedRuleContext(OperatorContext, 0) as OperatorContext;
+	}
+	public simpleValue(): SimpleValueContext {
+		return this.getTypedRuleContext(SimpleValueContext, 0) as SimpleValueContext;
+	}
+	public arrayValue(): ArrayValueContext {
+		return this.getTypedRuleContext(ArrayValueContext, 0) as ArrayValueContext;
 	}
     public get ruleIndex(): number {
     	return QueryParser.RULE_simpleCondition;

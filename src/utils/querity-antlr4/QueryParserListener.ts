@@ -8,6 +8,8 @@ import { ConditionContext } from "./QueryParser.js";
 import { OperatorContext } from "./QueryParser.js";
 import { ConditionWrapperContext } from "./QueryParser.js";
 import { NotConditionContext } from "./QueryParser.js";
+import { SimpleValueContext } from "./QueryParser.js";
+import { ArrayValueContext } from "./QueryParser.js";
 import { SimpleConditionContext } from "./QueryParser.js";
 import { DirectionContext } from "./QueryParser.js";
 import { SortFieldContext } from "./QueryParser.js";
@@ -70,6 +72,26 @@ export default class QueryParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitNotCondition?: (ctx: NotConditionContext) => void;
+	/**
+	 * Enter a parse tree produced by `QueryParser.simpleValue`.
+	 * @param ctx the parse tree
+	 */
+	enterSimpleValue?: (ctx: SimpleValueContext) => void;
+	/**
+	 * Exit a parse tree produced by `QueryParser.simpleValue`.
+	 * @param ctx the parse tree
+	 */
+	exitSimpleValue?: (ctx: SimpleValueContext) => void;
+	/**
+	 * Enter a parse tree produced by `QueryParser.arrayValue`.
+	 * @param ctx the parse tree
+	 */
+	enterArrayValue?: (ctx: ArrayValueContext) => void;
+	/**
+	 * Exit a parse tree produced by `QueryParser.arrayValue`.
+	 * @param ctx the parse tree
+	 */
+	exitArrayValue?: (ctx: ArrayValueContext) => void;
 	/**
 	 * Enter a parse tree produced by `QueryParser.simpleCondition`.
 	 * @param ctx the parse tree

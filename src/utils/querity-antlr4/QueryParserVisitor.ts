@@ -8,6 +8,8 @@ import { ConditionContext } from "./QueryParser.js";
 import { OperatorContext } from "./QueryParser.js";
 import { ConditionWrapperContext } from "./QueryParser.js";
 import { NotConditionContext } from "./QueryParser.js";
+import { SimpleValueContext } from "./QueryParser.js";
+import { ArrayValueContext } from "./QueryParser.js";
 import { SimpleConditionContext } from "./QueryParser.js";
 import { DirectionContext } from "./QueryParser.js";
 import { SortFieldContext } from "./QueryParser.js";
@@ -53,6 +55,18 @@ export default class QueryParserVisitor<Result> extends ParseTreeVisitor<Result>
 	 * @return the visitor result
 	 */
 	visitNotCondition?: (ctx: NotConditionContext) => Result;
+	/**
+	 * Visit a parse tree produced by `QueryParser.simpleValue`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitSimpleValue?: (ctx: SimpleValueContext) => Result;
+	/**
+	 * Visit a parse tree produced by `QueryParser.arrayValue`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitArrayValue?: (ctx: ArrayValueContext) => Result;
 	/**
 	 * Visit a parse tree produced by `QueryParser.simpleCondition`.
 	 * @param ctx the parse tree
