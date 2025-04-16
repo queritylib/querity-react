@@ -5,6 +5,7 @@ import dts from "rollup-plugin-dts";
 import terser from "@rollup/plugin-terser";
 import peerDepsExternal from "rollup-plugin-peer-deps-external";
 import postcss from 'rollup-plugin-postcss';
+import copy from 'rollup-plugin-copy';
 
 const packageJson = require("./package.json");
 
@@ -34,6 +35,14 @@ export default [
       terser(),
       postcss({
         extensions: [ '.css' ],
+      }),
+      copy({
+        targets: [
+          {
+            src: 'src/themes/*',
+            dest: 'dist/themes',
+          },
+        ],
       }),
     ],
     external: ["react", "react-dom", "antlr4"],

@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { QuerityBuilderUIProps } from "./QuerityBuilderUI.types";
 import { QuerityBuilder, QuerityParser, useComponents } from "../../utils";
-import {
-  ConditionWidget,
-  PaginationWidget,
-  SortWidget,
-  AddButton,
-  RemoveButton,
-} from "./widgets";
+import { ConditionWidget, PaginationWidget, SortWidget } from "./widgets";
 import {
   Condition,
   ConditionWrapper,
@@ -17,15 +11,14 @@ import {
   Pagination,
   Query,
   SimpleCondition,
-  Sort,
+  Sort
 } from "../../models";
-import "./QuerityBuilderUI.css";
 
 export const QuerityBuilderUI = (props: QuerityBuilderUIProps) => {
   const { query, onChange, className } = props;
   const [queryObj, setQueryObj] = useState<Query>({} as Query);
   const [invalid, setInvalid] = useState(false);
-  const { Checkbox } = useComponents();
+  const { Checkbox, Button } = useComponents();
 
   useEffect(() => {
     try {
@@ -124,10 +117,10 @@ export const QuerityBuilderUI = (props: QuerityBuilderUIProps) => {
           Invalid query
         </div>
       )}
-      <div id="distinct">
-        <h5>DISTINCT</h5>
+      <div id="distinct" className="section">
         <Checkbox
           id="distinct"
+          title="distinct"
           label="distinct"
           name="distinct"
           checked={queryObj.distinct ?? false}
@@ -137,36 +130,36 @@ export const QuerityBuilderUI = (props: QuerityBuilderUIProps) => {
           }}
         />
       </div>
-      <div id="filters">
-        <h5>FILTERS</h5>
-        {!queryObj.filter && <AddButton onClick={() => addCondition()} />}
+      <div id="filters" className="section">
+        <div className="section-title">FILTERS</div>
+        {!queryObj.filter &&
+          <Button className="add-condition-btn" onClick={() => addCondition()}>
+            + Add filter
+          </Button>}
         {queryObj.filter && (
-          <div className="condition">
-            <ConditionWidget
-              condition={queryObj.filter}
-              onChange={(c) => updateFilter(c)}
-              showNot
-              onRemove={() => removeFilter()}
-            />
-          </div>
+          <ConditionWidget
+            condition={queryObj.filter}
+            onChange={(c) => updateFilter(c)}
+            onRemove={() => removeFilter()}
+          />
         )}
       </div>
-      <div id="sorts">
-        <h5>SORTS</h5>
-        <AddButton onClick={() => addSort()} />
+      <div id="sorts" className="section">
+        <div className="section-title">SORTS</div>
         {queryObj.sort?.map((sort, index) => (
-          <>
-            <SortWidget
-              key={`sort-${index}`} // eslint-disable-line react/no-array-index-key
-              sort={sort}
-              onChange={(s) => updateSort(s, index)}
-            />
-            <RemoveButton onClick={() => removeSort(index)} />
-          </>
+          <SortWidget
+            key={`sort-${index}`} // eslint-disable-line react/no-array-index-key
+            sort={sort}
+            onChange={(s) => updateSort(s, index)}
+            onRemove={() => removeSort(index)}
+          />
         ))}
+        <Button className="add-sort-btn" onClick={() => addSort()}>
+          + Add sort
+        </Button>
       </div>
-      <div id="pagination">
-        <h5>PAGINATION</h5>
+      <div id="pagination" className="section">
+        <div className="section-title">PAGINATION</div>
         <PaginationWidget
           pagination={queryObj.pagination}
           onChange={(c) => updatePagination(c)}

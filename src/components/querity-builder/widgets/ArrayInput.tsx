@@ -1,7 +1,5 @@
 import React, { useEffect } from "react";
 import { useComponents } from "../../../utils";
-import { AddButton } from "./AddButton";
-import { RemoveButton } from "./RemoveButton";
 
 export const ArrayInput = (props: {
   name: string;
@@ -11,7 +9,7 @@ export const ArrayInput = (props: {
 }) => {
   const { name, placeholder, value, onChange } = props;
   const [values, setValues] = React.useState(value);
-  const { Input } = useComponents();
+  const { Input, Button } = useComponents();
 
   useEffect(() => {
     setValues(value);
@@ -50,11 +48,15 @@ export const ArrayInput = (props: {
             }}
           />
           {values.length > 1 && (
-            <RemoveButton title="remove value" onClick={() => removeValue(i)} />
+            <Button className="remove-btn" title="remove value" onClick={() => removeValue(i)}>
+              &times;
+            </Button>
           )}
         </>
       ))}
-      <AddButton title="add value" onClick={addValue} />
+      <Button className="add-value-btn" title="add value" onClick={addValue}>
+        +
+      </Button>
     </>
   );
 };

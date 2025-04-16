@@ -2,7 +2,6 @@ import React from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Condition, NotCondition } from "../../../models";
 import { useComponents } from "../../../utils";
-import "./NotSwitchWidget.css";
 
 export const NotSwitchWidget = (props: {
   active: boolean;
@@ -17,6 +16,7 @@ export const NotSwitchWidget = (props: {
       <Checkbox
         id={uuidv4()}
         label="not"
+        title="not"
         name="isNot"
         checked={active}
         onChange={(e) => {

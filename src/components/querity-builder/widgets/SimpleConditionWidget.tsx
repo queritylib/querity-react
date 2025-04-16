@@ -32,10 +32,10 @@ export const SimpleConditionWidget = (props: {
           }
           if (operator.requiredType === "array") {
             if (!Array.isArray(condition.value))
-              condition.value = [condition.value || ""];
+              condition.value = [condition.value ?? ""];
           }
           if (operator.requiredType === "single") {
-            if (!condition.value) condition.value = "";
+            condition.value ??= "";
             if (Array.isArray(condition.value))
               [condition.value] = condition.value; // keep first element
           }
@@ -48,28 +48,30 @@ export const SimpleConditionWidget = (props: {
           </option>
         ))}
       </Select>
-      {condition.operator.requiredValuesCount > 0 &&
-        (condition.operator.requiredType === "array" ? (
-          <ArrayInput
-            name="value"
-            placeholder="Value"
-            value={condition.value}
-            onChange={(value) => {
-              condition.value = value;
-              onChange(condition);
-            }}
-          />
-        ) : (
-          <Input
-            name="value"
-            placeholder="Value"
-            value={condition.value}
-            onChange={(e) => {
-              condition.value = e.target.value;
-              onChange(condition);
-            }}
-          />
-        ))}
+      <span className="value">
+        {condition.operator.requiredValuesCount > 0 &&
+          (condition.operator.requiredType === "array" ? (
+            <ArrayInput
+              name="value"
+              placeholder="Value"
+              value={condition.value}
+              onChange={(value) => {
+                condition.value = value;
+                onChange(condition);
+              }}
+            />
+          ) : (
+            <Input
+              name="value"
+              placeholder="Value"
+              value={condition.value}
+              onChange={(e) => {
+                condition.value = e.target.value;
+                onChange(condition);
+              }}
+            />
+          ))}
+      </span>
     </>
   );
 };
