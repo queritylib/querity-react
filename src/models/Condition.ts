@@ -1,2 +1,5 @@
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface Condition {}
+import { ConditionWrapper } from "./ConditionWrapper";
+import { NotCondition } from "./NotCondition";
+import { SimpleCondition } from "./SimpleCondition";
+
+export type Condition = SimpleCondition | ConditionWrapper | NotCondition;

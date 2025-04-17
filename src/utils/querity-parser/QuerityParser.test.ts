@@ -12,7 +12,7 @@ import {
   Sort,
 } from "../../models";
 
-describe("QuerityParser Integration Test", () => {
+describe("QuerityParser", () => {
   it('should parse lastName="Skywalker"', () => {
     const query = 'lastName="Skywalker"';
     const result = QuerityParser.parseQuery(query);
