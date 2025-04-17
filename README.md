@@ -31,7 +31,7 @@ or
 yarn add @queritylib/react
 ```
 
-## Provider
+## Provider & Styling
 
 To use the Querity components, you need to wrap your application with the `QuerityComponentsProvider`. This provider is responsible for providing the HTML components and the CSS styles needed for the Querity components to function properly.
 
@@ -41,7 +41,9 @@ This allows you to use any CSS framework or custom styles you prefer, such as **
 
 ### Usage
 
-Without any customization:
+#### With default theme
+
+Wrap your application with the `QuerityComponentsProvider` and use the default components:
 
 ```tsx
 import { 
@@ -61,7 +63,15 @@ function App() {
 }
 ```
 
-Custom components styled with **Tailwind CSS**:
+And import the default theme CSS file:
+
+```css
+@import '@queritylib/react/themes/default/style.css';
+```
+
+#### Custom components styled with **Tailwind CSS**
+
+Don't import the default theme CSS file, but instead use your own CSS framework or custom styles.
 
 ```tsx
 import {
@@ -96,6 +106,8 @@ function App() {
 }
 ```
 
+See `src/themes/default/style.css` as an example of how to style the default components.
+
 ## Components
 
 ### QuerityField
@@ -104,7 +116,7 @@ function App() {
 
 The invalid state can be styled by detecting the `aria-invalid` attribute.
 
-Here's how it looks (with custom components styled with Tailwind CSS, see [Provider](#provider)):
+Here's how it looks (with custom styles, see [Provider & Styling](#provider--styling)):
 
 ![QuerityField with valid query](/assets/querity-field-valid.png)
 
@@ -150,7 +162,7 @@ To apply a style when state is invalid add this CSS to your stylesheet:
 
 It includes all the necessary components to create a query in a visual way, including filters, sorting, and pagination.
 
-Here's how it looks (with custom components styled with Tailwind CSS, see [Provider](#provider)):
+Here's how it looks (with default theme, see [Provider & Styling](#provider--styling)):
 
 ![QuerityBuilderUI](/assets/querity-builder-ui.png)
 
