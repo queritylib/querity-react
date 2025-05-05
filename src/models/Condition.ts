@@ -1,5 +1,5 @@
-import { ConditionWrapper } from "./ConditionWrapper"; // eslint-disable-line import/no-cycle
-import { NotCondition } from "./NotCondition"; // eslint-disable-line import/no-cycle
-import { SimpleCondition } from "./SimpleCondition";
+import type { ConditionWrapper } from "./ConditionWrapper";
+import type { NotCondition } from "./NotCondition";
+import type { SimpleCondition } from "./SimpleCondition";
 
 export type Condition = SimpleCondition | ConditionWrapper | NotCondition;

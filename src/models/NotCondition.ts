@@ -1,4 +1,4 @@
-import { Condition } from "./Condition"; // eslint-disable-line import/no-cycle
+import type { Condition } from "./Condition";
 
 export class NotCondition {
   constructor(public condition: Condition) {
