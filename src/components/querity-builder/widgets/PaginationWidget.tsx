@@ -35,7 +35,10 @@ export const PaginationWidget = (props: {
           onChange({ page, pageSize: parseInt(e.target.value, 10) });
         }}
       />
-      <Button className="clear-pagination-btn" onClick={() => resetPagination()}>
+      <Button
+        className="clear-pagination-btn"
+        onClick={() => resetPagination()}
+      >
         Clear pagination
       </Button>
     </div>

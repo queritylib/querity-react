@@ -11,7 +11,7 @@ import {
   Pagination,
   Query,
   SimpleCondition,
-  Sort
+  Sort,
 } from "../../models";
 
 export const QuerityBuilderUI = (props: QuerityBuilderUIProps) => {
@@ -132,10 +132,11 @@ export const QuerityBuilderUI = (props: QuerityBuilderUIProps) => {
       </div>
       <div id="filters" className="section">
         <div className="section-title">FILTERS</div>
-        {!queryObj.filter &&
+        {!queryObj.filter && (
           <Button className="add-condition-btn" onClick={() => addCondition()}>
             + Add filter
-          </Button>}
+          </Button>
+        )}
         {queryObj.filter && (
           <ConditionWidget
             condition={queryObj.filter}

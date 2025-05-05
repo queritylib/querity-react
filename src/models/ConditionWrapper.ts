@@ -1,4 +1,4 @@
-import { Condition } from "./Condition";
+import { Condition } from "./Condition"; // eslint-disable-line import/no-cycle
 import { LogicOperator } from "./LogicOperator";
 
 export class ConditionWrapper {

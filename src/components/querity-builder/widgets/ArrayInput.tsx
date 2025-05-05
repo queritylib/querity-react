@@ -48,7 +48,11 @@ export const ArrayInput = (props: {
             }}
           />
           {values.length > 1 && (
-            <Button className="remove-btn" title="remove value" onClick={() => removeValue(i)}>
+            <Button
+              className="remove-btn"
+              title="remove value"
+              onClick={() => removeValue(i)}
+            >
               &times;
             </Button>
           )}
