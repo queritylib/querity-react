@@ -2,7 +2,7 @@
 module.exports = {
   testEnvironment: "jsdom",
   transform: {
-    "^.+\.tsx?$": ["ts-jest",{}],
+    "^.+.tsx?$": ["ts-jest",{}],
     ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "jest-transform-stub"
   },
   injectGlobals: false,

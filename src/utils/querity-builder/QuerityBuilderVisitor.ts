@@ -34,9 +34,7 @@ export class QuerityBuilderVisitor {
     if (condition instanceof NotCondition) {
       return QuerityBuilderVisitor.visitNotCondition(condition);
     }
-    return QuerityBuilderVisitor.visitSimpleCondition(
-      condition as SimpleCondition
-    );
+    return QuerityBuilderVisitor.visitSimpleCondition(condition);
   };
 
   private static readonly visitConditionWrapper = (
