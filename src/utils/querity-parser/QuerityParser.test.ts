@@ -255,7 +255,7 @@ describe("QuerityParser", () => {
 
   it("should throw error with invalid query", () => {
     const query = "invalid query";
-    expect(() => QuerityParser.parseQuery(query)).toThrowError(
+    expect(() => QuerityParser.parseQuery(query)).toThrow(
       /Syntax error at line \d+:\d+ - .+/
     );
   });
