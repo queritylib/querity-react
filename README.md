@@ -15,7 +15,7 @@ Check out the simplest demo application using Querity at [querity-demo](https://
 
 ## Requirements
 
-- React 19
+- React 18 or 19 (peer dependency)
 
 ## Installation
 
