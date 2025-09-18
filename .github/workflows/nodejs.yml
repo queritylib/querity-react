@@ -15,7 +15,7 @@ jobs:
       matrix:
         node-version: [18.x, 20.x, 22.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-        react-version: ["17.0.2", "18.3.1", "19.1.1"]
+        react-version: ["18.3.1", "19.1.1"]
 
     steps:
       - uses: actions/checkout@v4
