@@ -15,6 +15,7 @@ jobs:
       matrix:
         node-version: [18.x, 20.x, 22.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        react-version: ["17.0.2", "18.3.1", "19.1.1"]
 
     steps:
       - uses: actions/checkout@v4
@@ -24,5 +25,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - run: npm ci
+      # Force install the matrix React version
+      - run: npm install --no-save react@${{ matrix.react-version }} @types/react@${{ matrix.react_version }} react-dom@${{ matrix.react-version }} @types/react-dom@${{ matrix.react-version }}
       - run: npm run build --if-present
       - run: npm test
