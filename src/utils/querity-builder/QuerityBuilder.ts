@@ -1,8 +1,11 @@
-import { Query } from "../../models";
+import { Query, AdvancedQuery } from "../../models";
 import { QuerityBuilderVisitor } from "./QuerityBuilderVisitor";
 
 export class QuerityBuilder {
-  public static buildQuery(query: Query): string {
+  /**
+   * Build a query string from a Query or AdvancedQuery object.
+   */
+  public static buildQuery(query: Query | AdvancedQuery): string {
     return QuerityBuilderVisitor.visit(query);
   }
 }

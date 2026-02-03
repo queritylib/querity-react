@@ -15,18 +15,19 @@ export const SortWidget = (props: {
       <Input
         name="propertyName"
         placeholder="Property Name"
-        value={sort.propertyName}
+        value={sort.propertyName ?? ""}
         onChange={(e) => {
-          sort.propertyName = e.target.value;
-          onChange(sort);
+          const newSort = new Sort(e.target.value, sort.direction);
+          onChange(newSort);
         }}
       />
       <Select
         name="direction"
         value={sort.direction}
         onChange={(e) => {
-          sort.direction = Direction[e.target.value as keyof typeof Direction];
-          onChange(sort);
+          const newDirection = Direction[e.target.value as keyof typeof Direction];
+          const newSort = new Sort(sort.propertyName ?? "", newDirection);
+          onChange(newSort);
         }}
       >
         <option value="ASC">Ascending</option>

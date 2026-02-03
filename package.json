@@ -21,6 +21,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "build": "rollup -c --bundleConfigAsCjs",
+    "type-check": "tsc --noEmit",
     "lint": "eslint src --ext .js,.ts,.tsx",
     "test": "jest"
   },

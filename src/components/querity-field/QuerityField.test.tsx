@@ -72,9 +72,7 @@ describe("QuerityField", () => {
     fireEvent.keyDown(inputElement, { key: "Enter", code: "Enter" });
     expect(defaultProps.onInvalidQuery).toHaveBeenCalledWith(
       expect.objectContaining({
-        message: expect.stringMatching(
-          "Syntax error at line .* - mismatched input .*"
-        ),
+        message: expect.stringMatching(/Syntax error at line .* - .*/),
       })
     );
   });

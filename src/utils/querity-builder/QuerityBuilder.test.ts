@@ -10,19 +10,24 @@ import {
   Query,
   SimpleCondition,
   Sort,
+  AdvancedQuery,
+  SimpleSelect,
+  SimpleGroupBy,
+  FunctionCall,
+  Function,
+  PropertyReference,
+  FieldReference,
+  Literal,
 } from "../../models";
 
 describe("QuerityBuilder", () => {
-  it('should build lastName="Skywalker" with curly brackets Query', () => {
-    const query: Query = {
-      filter: {
-        propertyName: "lastName",
-        operator: Operator.EQUALS,
-        value: "Skywalker",
-      },
-      sort: [],
-      distinct: false,
-    };
+  it('should build lastName="Skywalker" with Query constructor', () => {
+    const query = new Query(
+      new SimpleCondition("lastName", Operator.EQUALS, "Skywalker"),
+      undefined, // pagination
+      [], // sort
+      false // distinct
+    );
     const result = QuerityBuilder.buildQuery(query);
     expect(result).toBe('lastName = "Skywalker"');
   });
@@ -242,5 +247,216 @@ describe("QuerityBuilder", () => {
     );
     const result = QuerityBuilder.buildQuery(query);
     expect(result).toBe("sort by lastName asc,age desc page 1,10");
+  });
+
+  it("should build query with only pagination", () => {
+    const query = new Query(undefined, new Pagination(1, 25), [], false);
+    const result = QuerityBuilder.buildQuery(query);
+    expect(result).toBe("page 1,25");
+  });
+
+  it("should build query with only sort", () => {
+    const query = new Query(
+      undefined,
+      undefined,
+      [new Sort("firstName", Direction.ASC)],
+      false
+    );
+    const result = QuerityBuilder.buildQuery(query);
+    expect(result).toBe("sort by firstName asc");
+  });
+
+  it("should build empty query", () => {
+    const query = new Query(undefined, undefined, [], false);
+    const result = QuerityBuilder.buildQuery(query);
+    expect(result).toBe("");
+  });
+});
+
+describe("QuerityBuilder - AdvancedQuery", () => {
+  it("should build AdvancedQuery with simple select", () => {
+    const query = AdvancedQuery.builder()
+      .select(SimpleSelect.of("firstName", "lastName"))
+      .build();
+    const result = QuerityBuilder.buildQuery(query);
+    expect(result).toBe("select firstName, lastName");
+  });
+
+  it("should build AdvancedQuery with select and filter", () => {
+    const query = AdvancedQuery.builder()
+      .select(SimpleSelect.of("firstName", "lastName"))
+      .filter(new SimpleCondition("age", Operator.GREATER_THAN, 18))
+      .build();
+    const result = QuerityBuilder.buildQuery(query);
+    expect(result).toBe("select firstName, lastName age > 18");
+  });
+
+  it("should build AdvancedQuery with group by", () => {
+    const query = AdvancedQuery.builder()
+      .select(SimpleSelect.of("category"))
+      .groupBy(SimpleGroupBy.of("category"))
+      .build();
+    const result = QuerityBuilder.buildQuery(query);
+    expect(result).toBe("select category group by category");
+  });
+
+  it("should build AdvancedQuery with select, group by, and having", () => {
+    const query = AdvancedQuery.builder()
+      .select(
+        SimpleSelect.ofExpressions(
+          PropertyReference.of("category"),
+          FunctionCall.of(Function.COUNT, PropertyReference.of("id"))
+        )
+      )
+      .groupBy(SimpleGroupBy.of("category"))
+      .having(
+        SimpleCondition.ofExpression(
+          FunctionCall.of(Function.COUNT, PropertyReference.of("id")),
+          Operator.GREATER_THAN,
+          10
+        )
+      )
+      .build();
+    const result = QuerityBuilder.buildQuery(query);
+    expect(result).toBe(
+      "select category, COUNT(id) group by category having COUNT(id) > 10"
+    );
+  });
+
+  it("should build AdvancedQuery with distinct", () => {
+    const query = AdvancedQuery.builder()
+      .select(SimpleSelect.of("category"))
+      .distinct()
+      .build();
+    const result = QuerityBuilder.buildQuery(query);
+    expect(result).toBe("select category distinct");
+  });
+
+  it("should build AdvancedQuery with sort and pagination", () => {
+    const query = AdvancedQuery.builder()
+      .select(SimpleSelect.of("firstName", "lastName"))
+      .sort(new Sort("lastName", Direction.ASC))
+      .pagination(1, 10)
+      .build();
+    const result = QuerityBuilder.buildQuery(query);
+    expect(result).toBe("select firstName, lastName sort by lastName asc page 1,10");
+  });
+});
+
+describe("QuerityBuilder - FunctionCall", () => {
+  it("should build condition with UPPER function", () => {
+    const query = new Query(
+      SimpleCondition.ofExpression(
+        FunctionCall.of(Function.UPPER, PropertyReference.of("lastName")),
+        Operator.EQUALS,
+        "SKYWALKER"
+      )
+    );
+    const result = QuerityBuilder.buildQuery(query);
+    expect(result).toBe('UPPER(lastName) = "SKYWALKER"');
+  });
+
+  it("should build condition with LENGTH function", () => {
+    const query = new Query(
+      SimpleCondition.ofExpression(
+        FunctionCall.of(Function.LENGTH, PropertyReference.of("name")),
+        Operator.GREATER_THAN,
+        5
+      )
+    );
+    const result = QuerityBuilder.buildQuery(query);
+    expect(result).toBe("LENGTH(name) > 5");
+  });
+
+  it("should build condition with nested function calls", () => {
+    const query = new Query(
+      SimpleCondition.ofExpression(
+        FunctionCall.of(
+          Function.LENGTH,
+          FunctionCall.of(Function.TRIM, PropertyReference.of("name"))
+        ),
+        Operator.GREATER_THAN,
+        0
+      )
+    );
+    const result = QuerityBuilder.buildQuery(query);
+    expect(result).toBe("LENGTH(TRIM(name)) > 0");
+  });
+
+  it("should build select with function call and alias", () => {
+    const query = AdvancedQuery.builder()
+      .select(
+        SimpleSelect.ofExpressions(
+          FunctionCall.of(Function.COUNT, PropertyReference.of("id")).as("total")
+        )
+      )
+      .build();
+    const result = QuerityBuilder.buildQuery(query);
+    expect(result).toBe("select COUNT(id) as total");
+  });
+
+  it("should build CONCAT function with multiple arguments", () => {
+    const query = AdvancedQuery.builder()
+      .select(
+        SimpleSelect.ofExpressions(
+          FunctionCall.of(
+            Function.CONCAT,
+            PropertyReference.of("firstName"),
+            Literal.of(" "),
+            PropertyReference.of("lastName")
+          )
+        )
+      )
+      .build();
+    const result = QuerityBuilder.buildQuery(query);
+    expect(result).toBe('select CONCAT(firstName, " ", lastName)');
+  });
+
+  it("should build sort with function expression", () => {
+    const query = new Query(
+      undefined,
+      undefined,
+      [Sort.ofExpression(FunctionCall.of(Function.LENGTH, PropertyReference.of("name")), Direction.DESC)]
+    );
+    const result = QuerityBuilder.buildQuery(query);
+    expect(result).toBe("sort by LENGTH(name) desc");
+  });
+});
+
+describe("QuerityBuilder - FieldReference", () => {
+  it("should build condition with field reference", () => {
+    const query = new Query(
+      new SimpleCondition("startDate", Operator.LESSER_THAN, FieldReference.of("endDate"))
+    );
+    const result = QuerityBuilder.buildQuery(query);
+    expect(result).toBe("startDate < endDate");
+  });
+
+  it("should build condition comparing two fields with equals", () => {
+    const query = new Query(
+      new SimpleCondition("firstName", Operator.EQUALS, FieldReference.of("lastName"))
+    );
+    const result = QuerityBuilder.buildQuery(query);
+    expect(result).toBe("firstName = lastName");
+  });
+
+  it("should reject field reference for unsupported operators", () => {
+    expect(() => {
+      new SimpleCondition("name", Operator.STARTS_WITH, FieldReference.of("other"));
+    }).toThrow();
+  });
+});
+
+describe("QuerityBuilder - PropertyReference with alias", () => {
+  it("should build select with property reference alias", () => {
+    const query = AdvancedQuery.builder()
+      .select(
+        SimpleSelect.ofExpressions(
+          PropertyReference.of("firstName").as("name")
+        )
+      )
+      .build();
+    const result = QuerityBuilder.buildQuery(query);
+    expect(result).toBe("select firstName as name");
   });
 });

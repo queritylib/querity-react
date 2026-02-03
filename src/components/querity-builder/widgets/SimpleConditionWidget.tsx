@@ -15,10 +15,14 @@ export const SimpleConditionWidget = (props: {
       <Input
         name="propertyName"
         placeholder="Property Name"
-        value={condition.propertyName}
+        value={condition.propertyName ?? ""}
         onChange={(e) => {
-          condition.propertyName = e.target.value;
-          onChange(condition);
+          const newCondition = new SimpleCondition(
+            e.target.value,
+            condition.operator,
+            condition.value
+          );
+          onChange(newCondition);
         }}
       />
       <Select
@@ -26,20 +30,30 @@ export const SimpleConditionWidget = (props: {
         value={condition.operator.name}
         onChange={(e) => {
           const operator = Operator.getOperator(e.target.value);
-          condition.operator = operator;
+          let newValue = condition.value;
+
           if (operator.requiredType === "none") {
-            condition.value = undefined;
+            newValue = undefined;
           }
           if (operator.requiredType === "array") {
-            if (!Array.isArray(condition.value))
-              condition.value = [condition.value ?? ""];
+            if (!Array.isArray(newValue)) {
+              newValue = [newValue ?? ""];
+            }
           }
           if (operator.requiredType === "single") {
-            condition.value ??= "";
-            if (Array.isArray(condition.value))
-              [condition.value] = condition.value; // keep first element
+            if (newValue === undefined || newValue === null) {
+              newValue = "";
+            } else if (Array.isArray(newValue)) {
+              [newValue] = newValue; // keep first element
+            }
           }
-          onChange(condition);
+
+          const newCondition = new SimpleCondition(
+            condition.propertyName ?? "",
+            operator,
+            newValue
+          );
+          onChange(newCondition);
         }}
       >
         {Object.values(Operator).map((op: Operator) => (
@@ -56,8 +70,12 @@ export const SimpleConditionWidget = (props: {
               placeholder="Value"
               value={condition.value}
               onChange={(value) => {
-                condition.value = value;
-                onChange(condition);
+                const newCondition = new SimpleCondition(
+                  condition.propertyName ?? "",
+                  condition.operator,
+                  value
+                );
+                onChange(newCondition);
               }}
             />
           ) : (
@@ -66,8 +84,12 @@ export const SimpleConditionWidget = (props: {
               placeholder="Value"
               value={condition.value}
               onChange={(e) => {
-                condition.value = e.target.value;
-                onChange(condition);
+                const newCondition = new SimpleCondition(
+                  condition.propertyName ?? "",
+                  condition.operator,
+                  e.target.value
+                );
+                onChange(newCondition);
               }}
             />
           ))}
