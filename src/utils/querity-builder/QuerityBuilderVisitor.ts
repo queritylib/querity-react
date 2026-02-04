@@ -18,6 +18,8 @@ import {
   FieldReference,
   isFieldReference,
   isPropertyExpression,
+  isNullary,
+  Literal,
 } from "../../models";
 
 export class QuerityBuilderVisitor {
@@ -215,9 +217,6 @@ export class QuerityBuilderVisitor {
   };
 
   private static readonly visitFunctionCall = (func: FunctionCall): string => {
-    const { Function: FunctionEnum } = require("../../models/Function");
-    const { isNullary } = require("../../models/Function");
-
     // For nullary functions (like CURRENT_DATE), no parentheses
     if (isNullary(func.func)) {
       return func.func;
@@ -232,8 +231,6 @@ export class QuerityBuilderVisitor {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private static readonly visitFunctionArgument = (arg: any): string => {
-    const { Literal } = require("../../models/Literal");
-
     if (isPropertyExpression(arg)) {
       return QuerityBuilderVisitor.visitPropertyExpression(arg);
     }
