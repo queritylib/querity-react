@@ -10,6 +10,8 @@ import {
   SimpleSelect,
   SimpleGroupBy,
   AdvancedQuery,
+  Sort,
+  Direction,
 } from "./index";
 
 describe("FunctionCall", () => {
@@ -299,7 +301,7 @@ describe("AdvancedQuery", () => {
       .filter(new SimpleCondition("active", Operator.EQUALS, true))
       .groupBy(SimpleGroupBy.of("category"))
       .having(new SimpleCondition("count", Operator.GREATER_THAN, 0))
-      .sort(new (require("./Sort").Sort)("name", require("./Sort").Direction.ASC))
+      .sort(new Sort("name", Direction.ASC))
       .pagination(1, 25)
       .distinct()
       .build();
