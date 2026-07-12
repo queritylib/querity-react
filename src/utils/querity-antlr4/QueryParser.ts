@@ -51,32 +51,37 @@ export default class QueryParser extends Parser {
 	public static readonly ABS_FUNC = 30;
 	public static readonly SQRT_FUNC = 31;
 	public static readonly MOD_FUNC = 32;
-	public static readonly CONCAT_FUNC = 33;
-	public static readonly SUBSTRING_FUNC = 34;
-	public static readonly TRIM_FUNC = 35;
-	public static readonly LTRIM_FUNC = 36;
-	public static readonly RTRIM_FUNC = 37;
-	public static readonly LOWER_FUNC = 38;
-	public static readonly UPPER_FUNC = 39;
-	public static readonly LENGTH_FUNC = 40;
-	public static readonly LOCATE_FUNC = 41;
-	public static readonly CURRENT_DATE_FUNC = 42;
-	public static readonly CURRENT_TIME_FUNC = 43;
-	public static readonly CURRENT_TIMESTAMP_FUNC = 44;
-	public static readonly COALESCE_FUNC = 45;
-	public static readonly NULLIF_FUNC = 46;
-	public static readonly COUNT_FUNC = 47;
-	public static readonly SUM_FUNC = 48;
-	public static readonly AVG_FUNC = 49;
-	public static readonly MIN_FUNC = 50;
-	public static readonly MAX_FUNC = 51;
-	public static readonly INT_VALUE = 52;
-	public static readonly DECIMAL_VALUE = 53;
-	public static readonly BOOLEAN_VALUE = 54;
-	public static readonly STRING_VALUE = 55;
-	public static readonly BACKTICK_PROPERTY = 56;
-	public static readonly PROPERTY = 57;
-	public static readonly WS = 58;
+	public static readonly ADD_FUNC = 33;
+	public static readonly SUBTRACT_FUNC = 34;
+	public static readonly MULTIPLY_FUNC = 35;
+	public static readonly DIVIDE_FUNC = 36;
+	public static readonly NEGATE_FUNC = 37;
+	public static readonly CONCAT_FUNC = 38;
+	public static readonly SUBSTRING_FUNC = 39;
+	public static readonly TRIM_FUNC = 40;
+	public static readonly LTRIM_FUNC = 41;
+	public static readonly RTRIM_FUNC = 42;
+	public static readonly LOWER_FUNC = 43;
+	public static readonly UPPER_FUNC = 44;
+	public static readonly LENGTH_FUNC = 45;
+	public static readonly LOCATE_FUNC = 46;
+	public static readonly CURRENT_DATE_FUNC = 47;
+	public static readonly CURRENT_TIME_FUNC = 48;
+	public static readonly CURRENT_TIMESTAMP_FUNC = 49;
+	public static readonly COALESCE_FUNC = 50;
+	public static readonly NULLIF_FUNC = 51;
+	public static readonly COUNT_FUNC = 52;
+	public static readonly SUM_FUNC = 53;
+	public static readonly AVG_FUNC = 54;
+	public static readonly MIN_FUNC = 55;
+	public static readonly MAX_FUNC = 56;
+	public static readonly INT_VALUE = 57;
+	public static readonly DECIMAL_VALUE = 58;
+	public static readonly BOOLEAN_VALUE = 59;
+	public static readonly STRING_VALUE = 60;
+	public static readonly BACKTICK_PROPERTY = 61;
+	public static readonly PROPERTY = 62;
+	public static readonly WS = 63;
 	public static override readonly EOF = Token.EOF;
 	public static readonly RULE_query = 0;
 	public static readonly RULE_whereCondition = 1;
@@ -139,6 +144,11 @@ export default class QueryParser extends Parser {
                                                              "COMMA", "ABS_FUNC", 
                                                              "SQRT_FUNC", 
                                                              "MOD_FUNC", 
+                                                             "ADD_FUNC", 
+                                                             "SUBTRACT_FUNC", 
+                                                             "MULTIPLY_FUNC", 
+                                                             "DIVIDE_FUNC", 
+                                                             "NEGATE_FUNC", 
                                                              "CONCAT_FUNC", 
                                                              "SUBSTRING_FUNC", 
                                                              "TRIM_FUNC", 
@@ -219,7 +229,7 @@ export default class QueryParser extends Parser {
 			this.state = 59;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
-			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & 3221233692) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & 51380223) !== 0)) {
+			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & 3221233692) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & 1644167167) !== 0)) {
 				{
 				this.state = 58;
 				this.whereCondition();
@@ -459,8 +469,13 @@ export default class QueryParser extends Parser {
 			case 49:
 			case 50:
 			case 51:
+			case 52:
+			case 53:
+			case 54:
+			case 55:
 			case 56:
-			case 57:
+			case 61:
+			case 62:
 				this.enterOuterAlt(localctx, 1);
 				{
 				this.state = 96;
@@ -600,10 +615,10 @@ export default class QueryParser extends Parser {
 			this.state = 123;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
-			case 52:
-			case 53:
-			case 54:
-			case 55:
+			case 57:
+			case 58:
+			case 59:
+			case 60:
 				{
 				this.state = 120;
 				this.simpleValue();
@@ -615,8 +630,8 @@ export default class QueryParser extends Parser {
 				this.arrayValue();
 				}
 				break;
-			case 56:
-			case 57:
+			case 61:
+			case 62:
 				{
 				this.state = 122;
 				localctx._valueProperty = this.propertyName();
@@ -692,7 +707,7 @@ export default class QueryParser extends Parser {
 			{
 			this.state = 127;
 			_la = this._input.LA(1);
-			if(!(((((_la - 52)) & ~0x1F) === 0 && ((1 << (_la - 52)) & 15) !== 0))) {
+			if(!(((((_la - 57)) & ~0x1F) === 0 && ((1 << (_la - 57)) & 15) !== 0))) {
 			this._errHandler.recoverInline(this);
 			}
 			else {
@@ -769,8 +784,8 @@ export default class QueryParser extends Parser {
 			this.state = 142;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
-			case 56:
-			case 57:
+			case 61:
+			case 62:
 				this.enterOuterAlt(localctx, 1);
 				{
 				this.state = 140;
@@ -799,6 +814,11 @@ export default class QueryParser extends Parser {
 			case 49:
 			case 50:
 			case 51:
+			case 52:
+			case 53:
+			case 54:
+			case 55:
+			case 56:
 				this.enterOuterAlt(localctx, 2);
 				{
 				this.state = 141;
@@ -833,7 +853,7 @@ export default class QueryParser extends Parser {
 			{
 			this.state = 144;
 			_la = this._input.LA(1);
-			if(!(_la===56 || _la===57)) {
+			if(!(_la===61 || _la===62)) {
 			this._errHandler.recoverInline(this);
 			}
 			else {
@@ -877,13 +897,18 @@ export default class QueryParser extends Parser {
 			case 39:
 			case 40:
 			case 41:
+			case 42:
+			case 43:
+			case 44:
 			case 45:
 			case 46:
-			case 47:
-			case 48:
-			case 49:
 			case 50:
 			case 51:
+			case 52:
+			case 53:
+			case 54:
+			case 55:
+			case 56:
 				this.enterOuterAlt(localctx, 1);
 				{
 				this.state = 146;
@@ -893,7 +918,7 @@ export default class QueryParser extends Parser {
 				this.state = 149;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-				if (((((_la - 30)) & ~0x1F) === 0 && ((1 << (_la - 30)) & 268435455) !== 0)) {
+				if (_la===30 || _la===31 || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & 2147483647) !== 0)) {
 					{
 					this.state = 148;
 					this.functionArgs();
@@ -904,9 +929,9 @@ export default class QueryParser extends Parser {
 				this.match(QueryParser.RPAREN);
 				}
 				break;
-			case 42:
-			case 43:
-			case 44:
+			case 47:
+			case 48:
+			case 49:
 				this.enterOuterAlt(localctx, 2);
 				{
 				this.state = 153;
@@ -941,7 +966,7 @@ export default class QueryParser extends Parser {
 			{
 			this.state = 156;
 			_la = this._input.LA(1);
-			if(!(((((_la - 42)) & ~0x1F) === 0 && ((1 << (_la - 42)) & 7) !== 0))) {
+			if(!(((((_la - 47)) & ~0x1F) === 0 && ((1 << (_la - 47)) & 7) !== 0))) {
 			this._errHandler.recoverInline(this);
 			}
 			else {
@@ -974,7 +999,7 @@ export default class QueryParser extends Parser {
 			{
 			this.state = 158;
 			_la = this._input.LA(1);
-			if(!(((((_la - 30)) & ~0x1F) === 0 && ((1 << (_la - 30)) & 4165631) !== 0))) {
+			if(!(((((_la - 30)) & ~0x1F) === 0 && ((1 << (_la - 30)) & 133300223) !== 0))) {
 			this._errHandler.recoverInline(this);
 			}
 			else {
@@ -1069,18 +1094,23 @@ export default class QueryParser extends Parser {
 			case 49:
 			case 50:
 			case 51:
+			case 52:
+			case 53:
+			case 54:
+			case 55:
 			case 56:
-			case 57:
+			case 61:
+			case 62:
 				this.enterOuterAlt(localctx, 1);
 				{
 				this.state = 168;
 				this.propertyExpression();
 				}
 				break;
-			case 52:
-			case 53:
-			case 54:
-			case 55:
+			case 57:
+			case 58:
+			case 59:
+			case 60:
 				this.enterOuterAlt(localctx, 2);
 				{
 				this.state = 169;
@@ -1342,7 +1372,7 @@ export default class QueryParser extends Parser {
 		return localctx;
 	}
 
-	public static readonly _serializedATN: number[] = [4,1,58,205,2,0,7,0,2,
+	public static readonly _serializedATN: number[] = [4,1,63,205,2,0,7,0,2,
 	1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,7,7,2,8,7,8,2,9,7,9,2,
 	10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,14,7,14,2,15,7,15,2,16,7,16,2,17,
 	7,17,2,18,7,18,2,19,7,19,2,20,7,20,2,21,7,21,2,22,7,22,2,23,7,23,2,24,7,
@@ -1358,8 +1388,8 @@ export default class QueryParser extends Parser {
 	19,1,20,1,20,1,20,5,20,180,8,20,10,20,12,20,183,9,20,1,21,1,21,1,22,1,22,
 	1,22,1,23,1,23,1,23,5,23,193,8,23,10,23,12,23,196,9,23,1,24,1,24,1,24,1,
 	25,1,25,1,25,1,25,1,25,0,0,26,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,
-	32,34,36,38,40,42,44,46,48,50,0,7,1,0,2,3,1,0,14,26,1,0,52,55,1,0,56,57,
-	1,0,42,44,2,0,30,41,45,51,1,0,7,8,203,0,53,1,0,0,0,2,76,1,0,0,0,4,80,1,
+	32,34,36,38,40,42,44,46,48,50,0,7,1,0,2,3,1,0,14,26,1,0,57,60,1,0,61,62,
+	1,0,47,49,2,0,30,46,50,56,1,0,7,8,203,0,53,1,0,0,0,2,76,1,0,0,0,4,80,1,
 	0,0,0,6,83,1,0,0,0,8,91,1,0,0,0,10,99,1,0,0,0,12,101,1,0,0,0,14,113,1,0,
 	0,0,16,118,1,0,0,0,18,125,1,0,0,0,20,127,1,0,0,0,22,129,1,0,0,0,24,142,
 	1,0,0,0,26,144,1,0,0,0,28,154,1,0,0,0,30,156,1,0,0,0,32,158,1,0,0,0,34,
@@ -1402,8 +1432,8 @@ export default class QueryParser extends Parser {
 	187,5,11,0,0,187,188,3,46,23,0,188,45,1,0,0,0,189,194,3,24,12,0,190,191,
 	5,29,0,0,191,193,3,24,12,0,192,190,1,0,0,0,193,196,1,0,0,0,194,192,1,0,
 	0,0,194,195,1,0,0,0,195,47,1,0,0,0,196,194,1,0,0,0,197,198,5,12,0,0,198,
-	199,3,10,5,0,199,49,1,0,0,0,200,201,5,52,0,0,201,202,5,29,0,0,202,203,5,
-	52,0,0,203,51,1,0,0,0,22,53,56,59,62,65,69,73,76,88,94,99,108,123,135,142,
+	199,3,10,5,0,199,49,1,0,0,0,200,201,5,57,0,0,201,202,5,29,0,0,202,203,5,
+	57,0,0,203,51,1,0,0,0,22,53,56,59,62,65,69,73,76,88,94,99,108,123,135,142,
 	149,154,165,170,174,181,194];
 
 	private static __ATN: ATN;
@@ -2124,6 +2154,21 @@ export class FunctionNameContext extends ParserRuleContext {
 	}
 	public MOD_FUNC(): TerminalNode {
 		return this.getToken(QueryParser.MOD_FUNC, 0);
+	}
+	public ADD_FUNC(): TerminalNode {
+		return this.getToken(QueryParser.ADD_FUNC, 0);
+	}
+	public SUBTRACT_FUNC(): TerminalNode {
+		return this.getToken(QueryParser.SUBTRACT_FUNC, 0);
+	}
+	public MULTIPLY_FUNC(): TerminalNode {
+		return this.getToken(QueryParser.MULTIPLY_FUNC, 0);
+	}
+	public DIVIDE_FUNC(): TerminalNode {
+		return this.getToken(QueryParser.DIVIDE_FUNC, 0);
+	}
+	public NEGATE_FUNC(): TerminalNode {
+		return this.getToken(QueryParser.NEGATE_FUNC, 0);
 	}
 	public CONCAT_FUNC(): TerminalNode {
 		return this.getToken(QueryParser.CONCAT_FUNC, 0);

@@ -412,6 +412,86 @@ describe("QuerityBuilder - FunctionCall", () => {
     expect(result).toBe('select CONCAT(firstName, " ", lastName)');
   });
 
+  it("should build condition with ADD function", () => {
+    const query = new Query(
+      SimpleCondition.ofExpression(
+        FunctionCall.of(
+          Function.ADD,
+          PropertyReference.of("a"),
+          PropertyReference.of("b")
+        ),
+        Operator.EQUALS,
+        5
+      )
+    );
+    const result = QuerityBuilder.buildQuery(query);
+    expect(result).toBe("ADD(a, b) = 5");
+  });
+
+  it("should build condition with nested arithmetic functions", () => {
+    const query = new Query(
+      SimpleCondition.ofExpression(
+        FunctionCall.of(
+          Function.ADD,
+          FunctionCall.of(
+            Function.MULTIPLY,
+            PropertyReference.of("price"),
+            Literal.of(1.22)
+          ),
+          PropertyReference.of("fee")
+        ),
+        Operator.GREATER_THAN,
+        0
+      )
+    );
+    const result = QuerityBuilder.buildQuery(query);
+    expect(result).toBe("ADD(MULTIPLY(price, 1.22), fee) > 0");
+  });
+
+  it("should build condition with SUBTRACT function", () => {
+    const query = new Query(
+      SimpleCondition.ofExpression(
+        FunctionCall.of(
+          Function.SUBTRACT,
+          PropertyReference.of("qty"),
+          PropertyReference.of("reserved")
+        ),
+        Operator.GREATER_THAN,
+        0
+      )
+    );
+    const result = QuerityBuilder.buildQuery(query);
+    expect(result).toBe("SUBTRACT(qty, reserved) > 0");
+  });
+
+  it("should build condition with DIVIDE function", () => {
+    const query = new Query(
+      SimpleCondition.ofExpression(
+        FunctionCall.of(
+          Function.DIVIDE,
+          PropertyReference.of("total"),
+          PropertyReference.of("divisor")
+        ),
+        Operator.GREATER_THAN_EQUALS,
+        1
+      )
+    );
+    const result = QuerityBuilder.buildQuery(query);
+    expect(result).toBe("DIVIDE(total, divisor) >= 1");
+  });
+
+  it("should build condition with NEGATE function", () => {
+    const query = new Query(
+      SimpleCondition.ofExpression(
+        FunctionCall.of(Function.NEGATE, PropertyReference.of("value")),
+        Operator.LESSER_THAN,
+        0
+      )
+    );
+    const result = QuerityBuilder.buildQuery(query);
+    expect(result).toBe("NEGATE(value) < 0");
+  });
+
   it("should build sort with function expression", () => {
     const query = new Query(
       undefined,

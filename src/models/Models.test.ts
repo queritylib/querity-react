@@ -60,6 +60,50 @@ describe("FunctionCall", () => {
       const fc = FunctionCall.of(Function.COALESCE, PropertyReference.of("a"));
       expect(fc.args).toHaveLength(1);
     });
+
+    it("should allow variadic ADD with more than 2 arguments", () => {
+      const fc = FunctionCall.of(
+        Function.ADD,
+        PropertyReference.of("a"),
+        PropertyReference.of("b"),
+        PropertyReference.of("c")
+      );
+      expect(fc.args).toHaveLength(3);
+    });
+
+    it("should reject variadic function ADD with less than 2 arguments", () => {
+      expect(() => {
+        FunctionCall.of(Function.ADD, PropertyReference.of("a"));
+      }).toThrow(/requires at least 2 argument\(s\)/);
+    });
+
+    it("should reject variadic function MULTIPLY with less than 2 arguments", () => {
+      expect(() => {
+        FunctionCall.of(Function.MULTIPLY, PropertyReference.of("a"));
+      }).toThrow(/requires at least 2 argument\(s\)/);
+    });
+
+    it("should reject SUBTRACT with wrong argument count", () => {
+      expect(() => {
+        FunctionCall.of(Function.SUBTRACT, PropertyReference.of("a"));
+      }).toThrow(/requires 2 argument\(s\)/);
+    });
+
+    it("should reject DIVIDE with wrong argument count", () => {
+      expect(() => {
+        FunctionCall.of(
+          Function.DIVIDE,
+          PropertyReference.of("a"),
+          PropertyReference.of("b"),
+          PropertyReference.of("c")
+        );
+      }).toThrow(/requires 2 argument\(s\)/);
+    });
+
+    it("should allow unary NEGATE with 1 argument", () => {
+      const fc = FunctionCall.of(Function.NEGATE, PropertyReference.of("a"));
+      expect(fc.args).toHaveLength(1);
+    });
   });
 
   describe("toExpressionString", () => {

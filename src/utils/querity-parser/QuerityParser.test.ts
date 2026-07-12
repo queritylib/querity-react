@@ -444,6 +444,84 @@ describe("QuerityParser", () => {
     expect(filter.value).toBe(0);
   });
 
+  it("should parse ADD(a, b) = 5", () => {
+    const query = "ADD(a, b) = 5";
+    const result = QuerityParser.parseQuery(query);
+    const filter = result.filter as SimpleCondition;
+    expect(filter.leftExpression).toBeInstanceOf(FunctionCall);
+    const func = filter.leftExpression as FunctionCall;
+    expect(func.func).toBe(Function.ADD);
+    expect(func.args).toHaveLength(2);
+    expect(filter.value).toBe(5);
+  });
+
+  it("should parse variadic ADD(a, b, c) > 0", () => {
+    const query = "ADD(a, b, c) > 0";
+    const result = QuerityParser.parseQuery(query);
+    const filter = result.filter as SimpleCondition;
+    const func = filter.leftExpression as FunctionCall;
+    expect(func.func).toBe(Function.ADD);
+    expect(func.args).toHaveLength(3);
+  });
+
+  it("should parse SUBTRACT(qty, reserved) > 0", () => {
+    const query = "SUBTRACT(qty, reserved) > 0";
+    const result = QuerityParser.parseQuery(query);
+    const filter = result.filter as SimpleCondition;
+    const func = filter.leftExpression as FunctionCall;
+    expect(func.func).toBe(Function.SUBTRACT);
+    expect(func.args).toHaveLength(2);
+  });
+
+  it("should parse MULTIPLY(price, 1.22) > 100", () => {
+    const query = "MULTIPLY(price, 1.22) > 100";
+    const result = QuerityParser.parseQuery(query);
+    const filter = result.filter as SimpleCondition;
+    const func = filter.leftExpression as FunctionCall;
+    expect(func.func).toBe(Function.MULTIPLY);
+    expect(func.args).toHaveLength(2);
+    expect((func.args[0] as PropertyReference).propertyName).toBe("price");
+    expect((func.args[1] as Literal).value).toBe(1.22);
+  });
+
+  it("should parse DIVIDE(total, divisor) >= 1", () => {
+    const query = "DIVIDE(total, divisor) >= 1";
+    const result = QuerityParser.parseQuery(query);
+    const filter = result.filter as SimpleCondition;
+    const func = filter.leftExpression as FunctionCall;
+    expect(func.func).toBe(Function.DIVIDE);
+    expect(func.args).toHaveLength(2);
+  });
+
+  it("should parse NEGATE(value) < 0", () => {
+    const query = "NEGATE(value) < 0";
+    const result = QuerityParser.parseQuery(query);
+    const filter = result.filter as SimpleCondition;
+    const func = filter.leftExpression as FunctionCall;
+    expect(func.func).toBe(Function.NEGATE);
+    expect(func.args).toHaveLength(1);
+  });
+
+  it("should parse nested arithmetic ADD(MULTIPLY(price, 1.22), fee) > 0", () => {
+    const query = "ADD(MULTIPLY(price, 1.22), fee) > 0";
+    const result = QuerityParser.parseQuery(query);
+    const filter = result.filter as SimpleCondition;
+    const outerFunc = filter.leftExpression as FunctionCall;
+    expect(outerFunc.func).toBe(Function.ADD);
+    expect(outerFunc.args).toHaveLength(2);
+    expect(outerFunc.args[0]).toBeInstanceOf(FunctionCall);
+    const innerFunc = outerFunc.args[0] as FunctionCall;
+    expect(innerFunc.func).toBe(Function.MULTIPLY);
+  });
+
+  it("should parse lowercase arithmetic function add(a, b) = 5", () => {
+    const query = "add(a, b) = 5";
+    const result = QuerityParser.parseQuery(query);
+    const filter = result.filter as SimpleCondition;
+    const func = filter.leftExpression as FunctionCall;
+    expect(func.func).toBe(Function.ADD);
+  });
+
   it("should parse SUBSTRING(name, 1, 3) = \"Sky\"", () => {
     const query = 'SUBSTRING(name, 1, 3) = "Sky"';
     const result = QuerityParser.parseQuery(query);

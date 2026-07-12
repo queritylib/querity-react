@@ -22,6 +22,11 @@ export enum Function {
   ABS = "ABS",
   SQRT = "SQRT",
   MOD = "MOD",
+  ADD = "ADD",
+  SUBTRACT = "SUBTRACT",
+  MULTIPLY = "MULTIPLY",
+  DIVIDE = "DIVIDE",
+  NEGATE = "NEGATE",
 
   // String functions
   CONCAT = "CONCAT",
@@ -67,6 +72,23 @@ export const FUNCTION_METADATA: Record<Function, FunctionMetadata> = {
   [Function.ABS]: { argumentCount: 1, category: FunctionCategory.ARITHMETIC },
   [Function.SQRT]: { argumentCount: 1, category: FunctionCategory.ARITHMETIC },
   [Function.MOD]: { argumentCount: 2, category: FunctionCategory.ARITHMETIC },
+  [Function.ADD]: { argumentCount: -1, category: FunctionCategory.ARITHMETIC },
+  [Function.SUBTRACT]: {
+    argumentCount: 2,
+    category: FunctionCategory.ARITHMETIC,
+  },
+  [Function.MULTIPLY]: {
+    argumentCount: -1,
+    category: FunctionCategory.ARITHMETIC,
+  },
+  [Function.DIVIDE]: {
+    argumentCount: 2,
+    category: FunctionCategory.ARITHMETIC,
+  },
+  [Function.NEGATE]: {
+    argumentCount: 1,
+    category: FunctionCategory.ARITHMETIC,
+  },
 
   // String
   [Function.CONCAT]: { argumentCount: -1, category: FunctionCategory.STRING },
@@ -140,6 +162,10 @@ export function getMinimumArguments(func: Function): number {
   if (!isVariadic(func)) {
     return meta.argumentCount;
   }
-  // Variadic functions: CONCAT needs at least 2, others need at least 1
-  return func === Function.CONCAT ? 2 : 1;
+  // Variadic functions: CONCAT/ADD/MULTIPLY need at least 2, others need at least 1
+  return func === Function.CONCAT ||
+    func === Function.ADD ||
+    func === Function.MULTIPLY
+    ? 2
+    : 1;
 }
