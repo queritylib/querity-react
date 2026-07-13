@@ -1,5 +1,6 @@
 import { describe, expect, it } from "@jest/globals";
 import { QuerityParser } from "./QuerityParser";
+import { QuerityBuilder } from "../querity-builder";
 import {
   AdvancedQuery,
   ConditionWrapper,
@@ -111,6 +112,38 @@ describe("QuerityParser", () => {
     expect(result).toEqual(
       new Query(new SimpleCondition("height", Operator.LESSER_THAN_EQUALS, 1.8))
     );
+  });
+
+  it("should parse negative integer value balance = -10", () => {
+    const query = "balance = -10";
+    const result = QuerityParser.parseQuery(query);
+    expect(result).toEqual(
+      new Query(new SimpleCondition("balance", Operator.EQUALS, -10))
+    );
+  });
+
+  it("should parse negative decimal value delta <= -1.5", () => {
+    const query = "delta <= -1.5";
+    const result = QuerityParser.parseQuery(query);
+    expect(result).toEqual(
+      new Query(new SimpleCondition("delta", Operator.LESSER_THAN_EQUALS, -1.5))
+    );
+  });
+
+  it("should parse negative values in array value IN (-1, 2, -3.5)", () => {
+    const query = "value IN (-1, 2, -3.5)";
+    const result = QuerityParser.parseQuery(query);
+    expect(result).toEqual(
+      new Query(new SimpleCondition("value", Operator.IN, [-1, 2, -3.5]))
+    );
+  });
+
+  it("should roundtrip a negative value through build and parse", () => {
+    const query = new Query(
+      new SimpleCondition("price", Operator.EQUALS, -10)
+    );
+    const built = QuerityBuilder.buildQuery(query);
+    expect(QuerityParser.parseQuery(built)).toEqual(query);
   });
 
   it('should parse and(lastName="Skywalker", age>30)', () => {
