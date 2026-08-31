@@ -1,9 +1,9 @@
 import js from "@eslint/js";
 import tseslint from "typescript-eslint";
-import react from "eslint-plugin-react";
+import eslintReact from "@eslint-react/eslint-plugin";
 import reactHooks from "eslint-plugin-react-hooks";
 import jsxA11y from "eslint-plugin-jsx-a11y";
-import importPlugin from "eslint-plugin-import";
+import importX from "eslint-plugin-import-x";
 import prettier from "eslint-plugin-prettier/recommended";
 import globals from "globals";
 
@@ -19,9 +19,13 @@ export default tseslint.config(
   // TypeScript-ESLint recommended rules
   ...tseslint.configs.recommended,
 
-  // React plugin
-  react.configs.flat.recommended,
-  react.configs.flat["jsx-runtime"],
+  // React plugin (@eslint-react: eslint-plugin-react has no ESLint 10 support)
+  {
+    files: ["**/*.{js,jsx,ts,tsx}"],
+    extends: [eslintReact.configs.recommended],
+  },
+  // Let eslint-plugin-react-hooks own the hooks rules
+  eslintReact.configs["disable-conflict-eslint-plugin-react-hooks"],
 
   // React Hooks (classic rules only — not the React Compiler preset)
   {
@@ -37,8 +41,8 @@ export default tseslint.config(
   // JSX Accessibility
   jsxA11y.flatConfigs.recommended,
 
-  // Import plugin
-  importPlugin.flatConfigs.recommended,
+  // Import plugin (eslint-plugin-import-x: the maintained fork with ESLint 10 support)
+  importX.flatConfigs.recommended,
 
   // Prettier (must be last preset to override conflicting rules)
   prettier,
@@ -57,10 +61,7 @@ export default tseslint.config(
       },
     },
     settings: {
-      react: {
-        version: "detect",
-      },
-      "import/resolver": {
+      "import-x/resolver": {
         typescript: true,
         node: true,
       },
@@ -72,15 +73,12 @@ export default tseslint.config(
     files: ["**/*.{js,ts,tsx}"],
     rules: {
       "prettier/prettier": "warn",
-      "react/jsx-props-no-spreading": "off",
       "no-nested-ternary": "off",
       "dot-notation": "off",
-      "react/require-default-props": "off",
       "@typescript-eslint/ban-ts-comment": "warn",
       "jsx-a11y/click-events-have-key-events": "off",
       "jsx-a11y/no-static-element-interactions": "off",
-      "react/function-component-definition": "off",
-      "import/no-extraneous-dependencies": [
+      "import-x/no-extraneous-dependencies": [
         "error",
         {
           devDependencies: true,
@@ -88,11 +86,14 @@ export default tseslint.config(
           peerDependencies: true,
         },
       ],
-      "react/no-unknown-property": ["error", { ignore: ["css"] }],
-      "react/prop-types": "off",
       "default-param-last": "off",
-      "import/export": "off",
-      "import/prefer-default-export": "off",
+      // Rules @eslint-react adds that eslint-plugin-react had no equivalent
+      // for. Kept off so this migration is lint-neutral; triage separately.
+      "@eslint-react/static-components": "off",
+      "@eslint-react/set-state-in-effect": "off",
+      "@eslint-react/no-use-context": "off",
+      "import-x/export": "off",
+      "import-x/prefer-default-export": "off",
     },
   },
 );

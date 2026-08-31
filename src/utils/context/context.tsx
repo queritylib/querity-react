@@ -21,7 +21,6 @@ export const defaultQuerityComponents: ComponentOverrides = {
     // eslint-disable-next-line jsx-a11y/label-has-associated-control
     <label className="switch">
       <input type="checkbox" {...props} />
-      {/* eslint-disable-next-line react/destructuring-assignment */}
       <span>{props.label}</span>{" "}
     </label>
   ),

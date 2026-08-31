@@ -34,15 +34,15 @@ export const ArrayInput = (props: {
   return (
     <>
       {values?.map((v, i) => (
-        <>
+        // eslint-disable-next-line @eslint-react/no-array-index-key
+        <React.Fragment key={`arrayinput-${i}`}>
           <Input
-            key={`arrayinput-${i}`} // eslint-disable-line react/no-array-index-key
             name={name}
             placeholder={placeholder}
             value={v}
             onChange={(e) => {
               const newValues = values.map((existingValue, j) =>
-                i === j ? e.target.value : existingValue
+                i === j ? e.target.value : existingValue,
               );
               updateValues(newValues);
             }}
@@ -56,7 +56,7 @@ export const ArrayInput = (props: {
               &times;
             </Button>
           )}
-        </>
+        </React.Fragment>
       ))}
       <Button className="add-value-btn" title="add value" onClick={addValue}>
         +

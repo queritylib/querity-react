@@ -149,7 +149,7 @@ export const QuerityBuilderUI = (props: QuerityBuilderUIProps) => {
         <div className="section-title">SORTS</div>
         {queryObj.sort?.map((sort, index) => (
           <SortWidget
-            key={`sort-${index}`} // eslint-disable-line react/no-array-index-key
+            key={`sort-${index}`} // eslint-disable-line @eslint-react/no-array-index-key
             sort={sort}
             onChange={(s) => updateSort(s, index)}
             onRemove={() => removeSort(index)}
