@@ -135,7 +135,7 @@ export const ConditionWidget = (props: {
 
         {cond.conditions.map((c, index) => (
           <ConditionWidget
-            key={`condition-${index}`} // eslint-disable-line react/no-array-index-key
+            key={`condition-${index}`} // eslint-disable-line @eslint-react/no-array-index-key
             condition={c}
             onChange={(updatedCond) =>
               updateConditionAtIndex(updatedCond, index)
