@@ -10,3 +10,10 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 10
+    ignore:
+      # TypeScript 7 is not adoptable yet: @rollup/plugin-typescript 12.3.0
+      # crashes at load on the TS 7 JS API, ts-jest peers on typescript < 7 and
+      # typescript-eslint on < 6.1. Drop this entry once those ship TS 7
+      # support. See #155.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
